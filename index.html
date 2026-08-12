@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Anthony Maraboli — Mechanical Engineering Portfolio</title>
+<meta name="description" content="Mechanical engineering portfolio of Anthony Maraboli, ME junior at Georgia Tech. SolidWorks design, CAD drawing packages, tolerance analysis, and design for additive manufacturing.">
+<meta property="og:title" content="Anthony Maraboli — Mechanical Engineering Portfolio">
+<meta property="og:description" content="SolidWorks design, drawing packages, and tolerance analysis. ME junior at Georgia Tech, CSWA certified.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F6F6F4;
+  --panel:#FFFFFF;
+  --ink:#14161A;
+  --graphite:#5A6067;
+  --rule:#CFD2CF;
+  --rule-strong:#14161A;
+  --navy:#002E51;
+  --gold:#B3A369;
+  --maxw:1120px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:"IBM Plex Sans",system-ui,sans-serif;
+  font-size:17px;
+  line-height:1.62;
+  -webkit-font-smoothing:antialiased;
+}
+img{max-width:100%;display:block}
+a{color:var(--navy);text-decoration:none;border-bottom:1px solid rgba(0,46,81,.28)}
+a:hover{border-bottom-color:var(--navy)}
+a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px}
+
+/* ---------- type roles ---------- */
+.display{font-family:"Archivo",sans-serif;font-weight:800;letter-spacing:-.022em;line-height:1.03}
+.label{
+  font-family:"IBM Plex Mono",monospace;
+  font-size:11px;font-weight:500;
+  letter-spacing:.14em;text-transform:uppercase;
+  color:var(--graphite);
+}
+.mono{font-family:"IBM Plex Mono",monospace}
+
+/* ---------- masthead ---------- */
+.masthead{padding:64px 0 0}
+.eyebrow{display:flex;gap:14px;align-items:center;margin-bottom:26px}
+.eyebrow .bar{height:1px;background:var(--rule-strong);flex:1}
+.masthead h1{
+  font-family:"Archivo",sans-serif;font-weight:800;
+  font-size:clamp(2.6rem,7vw,4.6rem);
+  letter-spacing:-.03em;line-height:.98;margin:0;
+}
+.tagline{
+  font-size:clamp(1.02rem,2vw,1.22rem);
+  color:var(--graphite);max-width:60ch;margin:20px 0 0;
+}
+.tagline strong{color:var(--ink);font-weight:600}
+.meta-row{
+  display:flex;flex-wrap:wrap;gap:10px 30px;
+  margin:30px 0 0;padding:16px 0 0;border-top:1px solid var(--rule);
+}
+.meta-row a{border-bottom:1px solid rgba(0,46,81,.3)}
+nav.jump{
+  display:flex;flex-wrap:wrap;gap:8px 26px;
+  margin-top:14px;padding:14px 0 54px;border-bottom:2px solid var(--rule-strong);
+}
+nav.jump a{
+  border-bottom:none;color:var(--ink);
+  font-family:"IBM Plex Mono",monospace;font-size:12px;
+  letter-spacing:.1em;text-transform:uppercase;
+}
+nav.jump a:hover{color:var(--navy);border-bottom:1px solid var(--navy)}
+
+/* ---------- project ---------- */
+.project{padding:78px 0 0}
+.kicker{
+  display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;margin-bottom:18px;
+}
+.kicker .tag{
+  font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--navy);
+  border:1px solid var(--navy);padding:4px 9px;
+}
+.project h2,.software h2,.skills h2{
+  font-family:"Archivo",sans-serif;font-weight:800;
+  font-size:clamp(1.9rem,4.4vw,3rem);letter-spacing:-.026em;
+  line-height:1.04;margin:0 0 14px;
+}
+.standfirst{font-size:1.1rem;color:var(--graphite);max-width:66ch;margin:0 0 30px}
+
+.hero-fig{margin:0 0 0}
+.hero-fig img{width:100%;border:1px solid var(--rule)}
+.hero-fig.portrait{
+  background:#080808;border:1.5px solid var(--rule-strong);border-bottom:none;
+  display:flex;justify-content:center;align-items:center;padding:26px 20px;
+}
+.hero-fig.portrait img{
+  width:auto;max-height:min(58vh,540px);border:none;
+}
+
+/* ---------- title block (signature element) ---------- */
+.titleblock{
+  border:1.5px solid var(--rule-strong);
+  border-top:none;
+  background:var(--panel);
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  margin:0 0 42px;
+}
+.titleblock .cell{
+  padding:11px 14px 12px;
+  border-right:1px solid var(--rule);
+  border-top:1px solid var(--rule);
+}
+.titleblock .cell:nth-child(-n+4){border-top:none}
+.titleblock .cell:nth-child(4n){border-right:none}
+.titleblock .cell .label{display:block;margin-bottom:3px;font-size:10px}
+.titleblock .cell .val{
+  font-family:"IBM Plex Mono",monospace;font-size:13.5px;
+  font-weight:500;line-height:1.35;color:var(--ink);
+}
+.titleblock .cell.span2{grid-column:span 2}
+
+/* ---------- body layout ---------- */
+.cols{display:grid;grid-template-columns:1.55fr .95fr;gap:52px;align-items:start}
+.body h3{
+  font-family:"IBM Plex Mono",monospace;font-weight:500;font-size:11px;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--graphite);
+  margin:34px 0 9px;padding-bottom:7px;border-bottom:1px solid var(--rule);
+}
+.body h3:first-child{margin-top:0}
+.body p{margin:0 0 14px}
+.body p:last-child{margin-bottom:0}
+
+.callout{
+  border-left:3px solid var(--gold);
+  background:var(--panel);
+  padding:16px 20px;margin:30px 0 0;
+}
+.callout .label{color:var(--navy);display:block;margin-bottom:6px}
+.callout p{font-size:16px;margin:0}
+
+/* spec sidebar */
+.spec{background:var(--panel);border:1px solid var(--rule);padding:4px 20px 18px}
+.spec dl{margin:0}
+.spec dt{
+  font-family:"IBM Plex Mono",monospace;font-size:10.5px;font-weight:500;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--graphite);
+  margin:18px 0 4px;
+}
+.spec dd{margin:0;font-size:15.5px;line-height:1.5}
+.spec ul{margin:0;padding-left:17px;font-size:15.5px;line-height:1.5}
+.spec li{margin-bottom:3px}
+.spec li::marker{color:var(--gold)}
+
+/* data table */
+.data{width:100%;border-collapse:collapse;margin:14px 0 0;font-size:14.5px}
+.data th,.data td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--rule)}
+.data th{
+  font-family:"IBM Plex Mono",monospace;font-size:10.5px;font-weight:500;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--graphite);
+  border-bottom:1px solid var(--rule-strong);
+}
+.data td.num{font-family:"IBM Plex Mono",monospace}
+
+/* ---------- figures ---------- */
+.figs{margin:54px 0 0;display:grid;gap:34px}
+.figs.two{grid-template-columns:1fr 1fr}
+figure{margin:0}
+figure img{width:100%;border:1px solid var(--rule);background:#fff}
+figcaption{
+  margin-top:10px;font-size:14px;line-height:1.5;color:var(--graphite);
+  padding-left:13px;border-left:2px solid var(--gold);
+}
+figcaption b{color:var(--ink);font-weight:600}
+
+/* video */
+.video{margin:54px 0 0}
+.video .frame{position:relative;padding-top:56.25%;border:1px solid var(--rule);background:#000}
+.video iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+
+/* depth links */
+.docs{margin:48px 0 0;border-top:1px solid var(--rule-strong);padding-top:20px}
+.docs .label{display:block;margin-bottom:14px}
+.doclist{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:0;border:1px solid var(--rule)}
+.doclist a{
+  display:block;padding:15px 18px;background:var(--panel);
+  border-right:1px solid var(--rule);border-bottom:none;color:var(--ink);
+}
+.doclist a:last-child{border-right:none}
+.doclist a:hover{background:#fff;color:var(--navy)}
+.doclist .t{font-weight:600;font-size:15.5px;display:block}
+.doclist .s{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--graphite);letter-spacing:.08em;text-transform:uppercase}
+
+/* ---------- software ---------- */
+.software{padding:96px 0 0}
+.sw-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1.5px solid var(--rule-strong);margin-top:34px}
+.sw{padding:26px 24px 28px;border-right:1px solid var(--rule);background:var(--panel)}
+.sw:last-child{border-right:none}
+.sw h3{font-family:"Archivo",sans-serif;font-weight:700;font-size:1.16rem;margin:0 0 4px;letter-spacing:-.012em}
+.sw .stack{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:12px}
+.sw p{font-size:15px;line-height:1.55;margin:0 0 14px;color:var(--graphite)}
+.sw .lk{font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.06em}
+.livebtn{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:"IBM Plex Mono",monospace;font-size:12.5px;font-weight:500;
+  letter-spacing:.08em;text-transform:uppercase;
+  padding:10px 16px;border:1.5px solid var(--navy);color:var(--navy);
+  border-bottom:1.5px solid var(--navy);
+  transition:background .15s ease,color .15s ease;
+}
+.livebtn:hover{background:var(--navy);color:#fff}
+.livebtn .dot{
+  width:7px;height:7px;border-radius:50%;background:#1E9E5A;
+  box-shadow:0 0 0 3px rgba(30,158,90,.18);
+  flex:none;
+}
+.livebtn:hover .dot{background:#fff;box-shadow:none}
+.srclink{
+  display:block;margin-top:10px;font-family:"IBM Plex Mono",monospace;
+  font-size:12px;letter-spacing:.05em;color:var(--graphite);border-bottom:none;
+}
+.srclink:hover{color:var(--navy)}
+
+/* ---------- skills / footer ---------- */
+.skills{padding:96px 0 0}
+.skill-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-top:2px solid var(--rule-strong);margin-top:26px}
+.skill{padding:22px 20px 24px;border-right:1px solid var(--rule)}
+.skill:last-child{border-right:none}
+.skill .label{display:block;margin-bottom:9px}
+.skill ul{margin:0;padding-left:16px;font-size:15px;line-height:1.6}
+.skill li::marker{color:var(--gold)}
+
+footer{margin-top:100px;border-top:2px solid var(--rule-strong);padding:34px 0 70px}
+footer .fgrid{display:flex;justify-content:space-between;gap:30px;flex-wrap:wrap;align-items:flex-end}
+footer .name{font-family:"Archivo",sans-serif;font-weight:800;font-size:1.5rem;letter-spacing:-.02em}
+footer .contact{font-family:"IBM Plex Mono",monospace;font-size:13.5px;line-height:1.9;text-align:right}
+@media (max-width:640px){footer .contact{text-align:left}}
+
+/* ---------- motion ---------- */
+.reveal{opacity:0;transform:translateY(14px);transition:opacity .6s ease,transform .6s ease}
+.reveal.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){
+  .reveal{opacity:1;transform:none;transition:none}
+}
+
+/* ---------- responsive ---------- */
+@media (max-width:900px){
+  .cols{grid-template-columns:1fr;gap:38px}
+  .titleblock{grid-template-columns:repeat(2,1fr)}
+  .titleblock .cell:nth-child(-n+4){border-top:1px solid var(--rule)}
+  .titleblock .cell:nth-child(-n+2){border-top:none}
+  .titleblock .cell:nth-child(4n){border-right:1px solid var(--rule)}
+  .titleblock .cell:nth-child(2n){border-right:none}
+  .titleblock .cell.span2{grid-column:span 2}
+  .sw-grid{grid-template-columns:1fr}
+  .sw{border-right:none;border-bottom:1px solid var(--rule)}
+  .sw:last-child{border-bottom:none}
+  .skill-grid{grid-template-columns:1fr 1fr}
+  .skill{border-bottom:1px solid var(--rule)}
+}
+@media (max-width:640px){
+  body{font-size:16px}
+  .wrap{padding:0 20px}
+  .masthead{padding-top:44px}
+  .figs.two{grid-template-columns:1fr}
+  .skill-grid{grid-template-columns:1fr}
+  .skill{border-right:none}
+  .doclist{grid-template-columns:1fr}
+  .doclist a{border-right:none;border-bottom:1px solid var(--rule)}
+  .doclist a:last-child{border-bottom:none}
+}
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">
+      <span class="label">Mechanical Engineering Portfolio</span>
+      <span class="bar"></span>
+      <span class="label">Georgia Tech &middot; 2026</span>
+    </div>
+
+    <h1>Anthony<br>Maraboli</h1>
+
+    <p class="tagline">
+      Mechanical engineering junior at <strong>Georgia Institute of Technology</strong>,
+      seeking a <strong>Summer 2027 engineering internship</strong>.
+      SolidWorks part and assembly modeling, full drawing packages, design for
+      manufacturing, and dimensional verification of printed hardware.
+    </p>
+
+    <div class="meta-row">
+      <span class="label">Certified SolidWorks Associate &mdash; 2025</span>
+      <span class="label">B.S.M.E. Expected May 2028</span>
+      <span class="label"><a href="mailto:amaraboli@icloud.com">amaraboli@icloud.com</a></span>
+    </div>
+
+    <nav class="jump" aria-label="Section navigation">
+      <a href="#music-box">Grand Piano Music Box</a>
+      <a href="#thrasher">B.C.F. Thrasher</a>
+      <a href="#software">Software</a>
+      <a href="#skills">Skills &amp; Tools</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+<!-- ============================ PROJECT 1 ============================ -->
+<article class="project" id="music-box">
+  <div class="wrap">
+
+    <div class="kicker">
+      <span class="tag">Solo Project</span>
+      <span class="label">Design for Additive Manufacturing</span>
+    </div>
+
+    <h2>Grand Piano Music Box</h2>
+    <p class="standfirst">
+      A miniature grand piano modeled in SolidWorks, printed in three parts, and built to
+      house a functioning music box movement &mdash; where closing the lid physically
+      stops the music.
+    </p>
+
+    <figure class="hero-fig portrait reveal">
+      <img src="images/piano-print.jpg"
+           alt="The finished 3D-printed grand piano music box in white filament, lid propped open on its support peg, with the brass music box movement visible inside the body."
+           width="1190" height="1322" loading="eager">
+    </figure>
+
+    <div class="titleblock">
+      <div class="cell span2">
+        <span class="label">Title</span>
+        <span class="val">Grand Piano Music Box</span>
+      </div>
+      <div class="cell">
+        <span class="label">Course</span>
+        <span class="val">ME 1670&#8209;D</span>
+      </div>
+      <div class="cell">
+        <span class="label">Term</span>
+        <span class="val">Fall 2025</span>
+      </div>
+      <div class="cell">
+        <span class="label">Role</span>
+        <span class="val">Sole designer</span>
+      </div>
+      <div class="cell">
+        <span class="label">Parts</span>
+        <span class="val">3</span>
+      </div>
+      <div class="cell">
+        <span class="label">Envelope</span>
+        <span class="val">76 &times; 74 &times; 47 mm</span>
+      </div>
+      <div class="cell">
+        <span class="label">Sheets</span>
+        <span class="val">6</span>
+      </div>
+    </div>
+
+    <div class="cols">
+      <div class="body">
+
+        <h3>Objective</h3>
+        <p>
+          Design a printable object that reads unmistakably as a Steinway-style grand piano,
+          fits inside a 3 &times; 3 &times; 3 in bounding box in every orientation, and
+          integrates a real 18-note music box movement so that the lid's motion controls playback.
+          The printed part measures 76.6 &times; 74.0 &times; 46.2 mm &mdash; about 3.0 &times; 2.9 &times; 1.8 in.
+        </p>
+
+        <h3>Design &amp; manufacturing decisions</h3>
+        <p>
+          The assembly is three parts &mdash; body, lid, and support peg &mdash; joined by
+          flexing snap-fit C-clips. The first design used a conventional piano hinge, but at
+          this scale the knuckles would have been a few millimeters across and would not have
+          printed reliably, so the hinge was abandoned in favor of clips at 1 mm wall thickness
+          with 2.5 and 3.5 mm radii, tuned to flex without yielding. Body walls were set to
+          2 mm for stiffness, and the underside was left largely hollow to cut material and
+          print time without touching visible geometry.
+        </p>
+        <p>
+          The functional interface came from the movement manufacturer's own dimensioned
+          drawing: a cylindrical housing in the interior corner captures the stopper pin, and a
+          pass-through bore in the base clears the wind-up shaft. Open the lid and the pin
+          rises and the music plays; close it and the lid presses the pin down and stops it.
+          A SolidWorks assembly with concentric, coincident, and perpendicular mates verified
+          hinge clearances, the peg's seating angle in the lid's spherical socket, and
+          bounding-box compliance before anything was sent to the printer.
+        </p>
+
+        <h3>Dimensional verification</h3>
+        <p>
+          About 20 features across all three parts were measured with calipers against their
+          CAD values. Most deviated by only 0.1&ndash;0.3 mm, and a consistent pattern showed
+          up: external dimensions printed slightly small, internal ones slightly large &mdash;
+          the expected signature of extrusion width and layer rounding on FDM.
+        </p>
+
+        <table class="data">
+          <caption class="label" style="text-align:left;padding-bottom:8px">Representative measured features</caption>
+          <thead>
+            <tr><th scope="col">Feature</th><th scope="col">CAD</th><th scope="col">Printed</th><th scope="col">Diff</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Music box pin bore &oslash;</td><td class="num">5.00</td><td class="num">4.97</td><td class="num">0.60%</td></tr>
+            <tr><td>Global width</td><td class="num">74.00</td><td class="num">73.99</td><td class="num">0.01%</td></tr>
+            <tr><td>Global height</td><td class="num">46.50</td><td class="num">46.22</td><td class="num">0.60%</td></tr>
+            <tr><td>Lid width</td><td class="num">76.00</td><td class="num">76.21</td><td class="num">0.28%</td></tr>
+            <tr><td>Peg snap-fit gap</td><td class="num">3.50</td><td class="num">2.70</td><td class="num">22.9%</td></tr>
+          </tbody>
+        </table>
+        <p style="font-size:14.5px;color:var(--graphite);margin-top:12px">
+          All values in millimeters. The peg's snap gap closing up by 0.8 mm was the largest
+          deviation and worked in the design's favor &mdash; the part is meant to flex, so the
+          tighter interference made the joint more secure without risking fracture.
+        </p>
+
+        <div class="callout">
+          <span class="label">Known limitation &amp; fix</span>
+          <p>
+            The lid's C-clip never printed. In CAD the cylindrical hinge bar met the flat body
+            wall at a true tangent &mdash; mathematically valid, but a zero-thickness,
+            non-manifold contact that the slicer read as having no surface to generate toolpath
+            against, so it skipped the feature entirely. The lid was bonded in place on the
+            physical model. The fix is straightforward and identified: add a small rectangular
+            support block behind the hinge cylinder so the circle overlaps a printable flat
+            face rather than touching it at an infinitesimal point.
+          </p>
+        </div>
+
+      </div>
+
+      <aside class="spec">
+        <dl>
+          <dt>Tools</dt>
+          <dd>SolidWorks &mdash; part, assembly, and drawing<br>FDM 3D printing<br>Caliper metrology</dd>
+
+          <dt>Methods</dt>
+          <dd>
+            <ul>
+              <li>Snap-fit design &amp; flexure sizing</li>
+              <li>Mate-driven clearance verification</li>
+              <li>Design for additive manufacturing</li>
+              <li>CAD-vs-printed tolerance study</li>
+            </ul>
+          </dd>
+
+          <dt>Deliverables</dt>
+          <dd>
+            <ul>
+              <li>3 modeled parts + assembly</li>
+              <li>6 dimensioned drawing sheets</li>
+              <li>Tolerance analysis, 3 tables</li>
+              <li>Written project report</li>
+            </ul>
+          </dd>
+
+          <dt>Result</dt>
+          <dd>
+            Movement seated on the first print, wind-up stem aligned through the base, and
+            the lid's closing motion reliably actuates the stopper pin.
+          </dd>
+        </dl>
+      </aside>
+    </div>
+
+    <div class="figs two">
+      <figure class="reveal">
+        <img src="images/piano-cad-features.jpg"
+             alt="Annotated SolidWorks render of the piano body with callouts naming each modeling feature, including extrusions for the base, walls, curved side wall, keyboard lip and legs, twenty-three key extrusions, fillets, a chamfer on the black key edges, and the C-clip."
+             loading="lazy">
+        <figcaption>
+          <b>Feature breakdown of the body.</b> Twelve named features build the part:
+          extrusions for base, walls, curved side wall, keyboard lip and legs; 23 individual
+          key extrusions; fillets at the lip edge and key spacing; a chamfer along the black
+          key edges; and the snap-fit C-clip. The keys were too fine for the printer to fully
+          resolve, but the fillets between them produced small divots that visually separate
+          white from black.
+        </figcaption>
+      </figure>
+      <figure class="reveal">
+        <img src="images/piano-assembly-drawing.png"
+             alt="SolidWorks assembly drawing sheet showing three orthographic views of the piano plus an exploded isometric view, with a parts table listing the body, lid and peg, and a Georgia Tech title block."
+             loading="lazy">
+        <figcaption>
+          <b>Assembly drawing, sheet 1 of 6.</b> Three orthographic views and an exploded
+          isometric with balloon callouts tied to the parts table. The full package adds
+          individually dimensioned sheets for the lid, the peg, and three sheets for the body
+          with section and detail views.
+        </figcaption>
+      </figure>
+    </div>
+
+    <div class="figs">
+      <figure class="reveal">
+        <img src="images/piano-body-drawing.png"
+             alt="Dimensioned SolidWorks drawing sheet of the piano body showing a sectioned front view with wall thicknesses, leg dimensions, key spacing, and a detail view at four times scale of the keyboard profile."
+             loading="lazy">
+        <figcaption>
+          <b>Body detail sheet.</b> Sectioned view carrying the 2 mm wall callouts, leg
+          geometry, C-clip radii, and a 4:1 detail of the keyboard profile &mdash; the
+          feature set that drove the print's success and its one failure.
+        </figcaption>
+      </figure>
+    </div>
+
+    <div class="docs">
+      <span class="label">Full documentation</span>
+      <div class="doclist">
+        <a href="docs/piano-report.pdf">
+          <span class="t">Project report</span>
+          <span class="s">PDF &middot; 12 pp</span>
+        </a>
+        <a href="docs/piano-drawings.pdf">
+          <span class="t">Drawing package</span>
+          <span class="s">PDF &middot; 6 sheets</span>
+        </a>
+      </div>
+    </div>
+
+  </div>
+</article>
+
+<!-- ============================ PROJECT 2 ============================ -->
+<article class="project" id="thrasher">
+  <div class="wrap">
+
+    <div class="kicker">
+      <span class="tag">Team of 5 &mdash; Project Manager</span>
+      <span class="label">Bio-Inspired Vehicle Concept</span>
+    </div>
+
+    <h2>B.C.F. Thrasher</h2>
+    <p class="standfirst">
+      A sailfish-inspired consumer submersible driven by body-caudal-fin locomotion.
+      I originated the concept, managed the team, designed the five-part body subassembly,
+      and wrote the integration procedure for the complete vehicle.
+    </p>
+
+    <figure class="hero-fig reveal">
+      <img src="images/thrasher-hangar.jpg"
+           alt="SolidWorks Visualize render of the B.C.F. Thrasher submersible, a chrome sailfish-shaped vehicle on stands inside a lit hangar tunnel, with the project logo in the upper left."
+           width="1800" height="1197" loading="lazy">
+    </figure>
+
+    <div class="titleblock">
+      <div class="cell span2">
+        <span class="label">Title</span>
+        <span class="val">B.C.F. Thrasher &mdash; J.S.L.A.M. Aquanautics</span>
+      </div>
+      <div class="cell">
+        <span class="label">Course</span>
+        <span class="val">ME 1670&#8209;D</span>
+      </div>
+      <div class="cell">
+        <span class="label">Term</span>
+        <span class="val">Fall 2025</span>
+      </div>
+      <div class="cell">
+        <span class="label">Role</span>
+        <span class="val">Project manager</span>
+      </div>
+      <div class="cell">
+        <span class="label">My parts</span>
+        <span class="val">5</span>
+      </div>
+      <div class="cell">
+        <span class="label">Team</span>
+        <span class="val">5 engineers</span>
+      </div>
+      <div class="cell">
+        <span class="label">Drawing scale</span>
+        <span class="val">1:60</span>
+      </div>
+    </div>
+
+    <div class="cols">
+      <div class="body">
+
+        <h3>Concept</h3>
+        <p>
+          The team set out to design a recreational submersible that swims rather than
+          propels &mdash; using body-caudal-fin motion, the locomotion mode fast pelagic fish
+          use, in place of a conventional screw. The hull follows a NACA 66-series profile
+          adapted to a sailfish silhouette. Five concept sketches were put to a team vote in
+          September 2025; mine was selected as the direction, and I served as project manager
+          through delivery.
+        </p>
+
+        <h3>What I designed</h3>
+        <p>
+          I owned the body subassembly &mdash; five parts, the largest and most geometrically
+          involved portion of the vehicle. The <b>fish body</b> is the primary hull: a lofted,
+          surfaced form carrying the canopy cutout, the hexagonal access opening, the wing
+          mounting blocks, and the interior track and boss that the door mechanism runs on.
+          The <b>wings</b> are airfoil-section pectoral fins that seat on angled connectors at
+          a 45&deg; downward mount, symmetric about the centerline.
+        </p>
+        <p>
+          The access hatch is a rack-and-pinion: a <b>12-tooth spur gear</b> mounted on an
+          interior cylinder meshes with a <b>32-tooth rack</b> cut into the top edge of the
+          <b>sliding door</b>, driving the hexagonal panel along an interior track so it sits
+          flush with the hull skin when closed. The <b>top fin connector</b> is a lens-shaped
+          insert that drops into the dorsal slot; its underside is flat to seat on the interior
+          surface while its top face follows the hull's curvature, so it locks by geometry
+          with no fasteners.
+        </p>
+
+        <h3>Integration</h3>
+        <p>
+          Beyond my own parts, I wrote the assembly procedure for the complete vehicle &mdash;
+          sequencing the body, peduncle vertebrae, caudal fin, turbine, and top fin
+          subassemblies into a single build order, specifying each mate and joint type and
+          the checks that confirm correct seating at each step. That document is the reference
+          the team assembled against.
+        </p>
+
+        <div class="callout">
+          <span class="label">Scope note</span>
+          <p>
+            The turbine module, peduncle vertebrae, caudal fin, and dorsal fin were designed
+            by teammates Jonathan Barr, Silas Bien, Laurentiu Punga, and Madeline Ly. They
+            appear in the renders and full-vehicle documentation as team context. The parts
+            credited to me above carry my name in their part numbers and are traceable in the
+            drawing package below.
+          </p>
+        </div>
+
+      </div>
+
+      <aside class="spec">
+        <dl>
+          <dt>Tools</dt>
+          <dd>SolidWorks &mdash; multi-body part, assembly, drawing<br>SolidWorks Visualize<br>Surface &amp; loft modeling</dd>
+
+          <dt>My parts</dt>
+          <dd>
+            <ul>
+              <li>Fish Body (primary hull)</li>
+              <li>Wings</li>
+              <li>Sliding Access Door</li>
+              <li>Door Gear (spur gear)</li>
+              <li>Top Fin Connector</li>
+            </ul>
+          </dd>
+
+          <dt>Responsibilities</dt>
+          <dd>
+            <ul>
+              <li>Concept origination</li>
+              <li>Project management</li>
+              <li>Body subassembly design</li>
+              <li>Full-vehicle assembly procedure</li>
+            </ul>
+          </dd>
+
+          <dt>Deliverables</dt>
+          <dd>
+            <ul>
+              <li>8-sheet drawing package</li>
+              <li>Two assembly procedures</li>
+              <li>Rendered visualizations</li>
+              <li>Team presentation &amp; video</li>
+            </ul>
+          </dd>
+        </dl>
+      </aside>
+    </div>
+
+    <div class="figs">
+      <figure class="reveal">
+        <img src="images/thrasher-body-exploded.png"
+             alt="Exploded sub-assembly drawing of the Thrasher body showing the fish body, wing, door gear, sliding door and top fin connector separated along assembly axes, with a parts table listing each part number under the name Maraboli Anthony."
+             loading="lazy">
+        <figcaption>
+          <b>Body exploded sub-assembly, scale 1:60.</b> The five parts I designed, separated
+          along their assembly axes with balloon callouts. The parts table carries the part
+          numbers directly &mdash; each one traceable to me by name within a five-person team.
+        </figcaption>
+      </figure>
+    </div>
+
+    <div class="figs two">
+      <figure class="reveal">
+        <img src="images/thrasher-body-views.png"
+             alt="Multi-view drawing of the Thrasher hull showing top, front, side and rear orthographic projections plus two isometric views, with section cuts A-A and B-B and a detail view of the bill tip."
+             loading="lazy">
+        <figcaption>
+          <b>Hull drawing, sheet 2 of 2.</b> Orthographic and isometric views with section
+          cuts A&ndash;A and B&ndash;B through the canopy and hatch, plus a 1:30 detail of the
+          bill tip. The sections show the interior track and gear boss that carry the door
+          mechanism.
+        </figcaption>
+      </figure>
+      <figure class="reveal">
+        <img src="images/thrasher-headon.jpg"
+             alt="Head-on render of the Thrasher inside a lit tunnel, showing the frontal silhouette with pectoral wings swept down and the dorsal fin raised."
+             loading="lazy">
+        <figcaption>
+          <b>Frontal geometry.</b> Head-on view showing the wings' 45&deg; downward mount and
+          the frontal cross-section of the hull &mdash; the profile that sets the vehicle's
+          drag characteristics.
+        </figcaption>
+      </figure>
+    </div>
+
+    <div class="figs">
+      <figure class="reveal">
+        <img src="images/thrasher-surface.jpg"
+             alt="Render of the Thrasher breaching at the ocean surface, throwing a wake, in daylight."
+             loading="lazy">
+        <figcaption>
+          <b>Surface breach.</b> Rendered in operating context to communicate scale and intent
+          &mdash; a recreational vehicle rather than a research platform.
+        </figcaption>
+      </figure>
+    </div>
+
+    <div class="video">
+      <span class="label" style="display:block;margin-bottom:12px">Team presentation</span>
+      <div class="frame">
+        <iframe src="https://www.youtube-nocookie.com/embed/hJd4KDDdPoU"
+                title="B.C.F. Thrasher team presentation video"
+                allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen loading="lazy"></iframe>
+      </div>
+    </div>
+
+    <div class="docs">
+      <span class="label">Full documentation</span>
+      <div class="doclist">
+        <a href="docs/thrasher-body-drawings.pdf">
+          <span class="t">Body drawing package</span>
+          <span class="s">PDF &middot; 8 sheets</span>
+        </a>
+        <a href="docs/thrasher-body-assembly.pdf">
+          <span class="t">Body assembly procedure</span>
+          <span class="s">PDF &middot; my subassembly</span>
+        </a>
+        <a href="docs/thrasher-full-assembly.pdf">
+          <span class="t">Vehicle integration procedure</span>
+          <span class="s">PDF &middot; all subassemblies</span>
+        </a>
+      </div>
+    </div>
+
+  </div>
+</article>
+
+<!-- ============================ SOFTWARE ============================ -->
+<section class="software" id="software">
+  <div class="wrap">
+    <div class="kicker">
+      <span class="tag">Independent Builds</span>
+      <span class="label">Self-directed, outside coursework</span>
+    </div>
+    <h2>Software</h2>
+    <p class="standfirst">
+      Full-stack web applications built to solve problems I actually had &mdash; a music
+      theory engine, and two study tools written for my own coursework. Developed with AI
+      assistance, designed and specified by me.
+    </p>
+
+    <div class="sw-grid">
+      <div class="sw">
+        <h3>Harmonic Compass</h3>
+        <span class="stack">React &middot; Tone.js &middot; ~3,800 lines</span>
+        <p>
+          A music theory workbench. Builds chord progressions in real time while detecting the
+          active key and tracking which keys remain harmonically viable as the progression
+          develops. Adds voice-leading analysis between chords, an interactive circle of
+          fifths, and a suggestion engine that proposes next chords from both theory
+          (secondary dominants, tritone substitutions) and a personal song library, with audio
+          playback throughout.
+        </p>
+        <a class="livebtn" href="https://harmonic-compass-seven.vercel.app/">
+          <span class="dot" aria-hidden="true"></span>
+          Open live demo &rarr;
+        </a>
+        <a class="srclink" href="https://github.com/amaraboli/harmonic-compass">View source on GitHub &rarr;</a>
+      </div>
+
+      <div class="sw">
+        <h3>Listening Test Trainer</h3>
+        <span class="stack">React &middot; Audio &middot; Spaced repetition</span>
+        <p>
+          Ear-training tool built for a music history course: identify title, composer, and
+          period across 28 works from Medieval through Romantic. Tracks mastery per piece on a
+          five-level scale, renders a mastery map and a period-accuracy heatmap to expose weak
+          areas, and drills missed items on retry.
+        </p>
+        <span class="lk">Hosting in progress</span>
+      </div>
+
+      <div class="sw">
+        <h3>Art Exam Practice Trainer</h3>
+        <span class="stack">React &middot; Image-based quiz</span>
+        <p>
+          Image identification trainer built for an art history course covering three exams.
+          Supports custom question ranges, shuffled or sequential order, multiple grading
+          modes, and a stats dashboard tracking performance across sessions &mdash; controls
+          that off-the-shelf flashcard tools do not offer.
+        </p>
+        <span class="lk">Hosting in progress</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ SKILLS ============================ -->
+<section class="skills" id="skills">
+  <div class="wrap">
+    <div class="kicker">
+      <span class="label">Capabilities</span>
+    </div>
+    <h2>Skills &amp; Tools</h2>
+
+    <div class="skill-grid">
+      <div class="skill">
+        <span class="label">CAD &amp; Design</span>
+        <ul>
+          <li>SolidWorks (CSWA)</li>
+          <li>Part &amp; assembly modeling</li>
+          <li>Drawing packages, GD&amp;T basics</li>
+          <li>Surface &amp; loft modeling</li>
+          <li>AutoCAD</li>
+        </ul>
+      </div>
+      <div class="skill">
+        <span class="label">Manufacturing</span>
+        <ul>
+          <li>Design for additive manufacturing</li>
+          <li>Snap-fit &amp; flexure design</li>
+          <li>Tolerance analysis</li>
+          <li>Caliper metrology</li>
+          <li>FDM 3D printing</li>
+        </ul>
+      </div>
+      <div class="skill">
+        <span class="label">Analysis &amp; Computing</span>
+        <ul>
+          <li>MATLAB</li>
+          <li>Statics &amp; deformable bodies</li>
+          <li>Engineering materials</li>
+          <li>Probability &amp; statistics</li>
+          <li>React / JavaScript</li>
+        </ul>
+      </div>
+      <div class="skill">
+        <span class="label">Professional</span>
+        <ul>
+          <li>Project management</li>
+          <li>Technical documentation</li>
+          <li>English &amp; Spanish (fluent)</li>
+          <li>Microsoft Office Suite</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="fgrid">
+      <div>
+        <div class="name">Anthony Maraboli</div>
+        <span class="label">B.S. Mechanical Engineering &middot; Georgia Institute of Technology</span>
+      </div>
+      <div class="contact">
+        <a href="mailto:amaraboli@icloud.com">amaraboli@icloud.com</a><br>
+        <a href="https://github.com/amaraboli">github.com/amaraboli</a>
+        <!-- PHASE 6: add LinkedIn once the profile is live, e.g.
+        <br><a href="https://www.linkedin.com/in/USERNAME">linkedin.com/in/USERNAME</a> -->
+        <!-- OPTIONAL: add resume once hosted, e.g.
+        <br><a href="docs/resume.pdf">Resume (PDF)</a> -->
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var els = document.querySelectorAll('.reveal');
+  if(!('IntersectionObserver' in window) ||
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+    els.forEach(function(e){ e.classList.add('in'); });
+    return;
+  }
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(en){
+      if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); }
+    });
+  }, {rootMargin:'0px 0px -8% 0px', threshold:0.06});
+  els.forEach(function(e){ io.observe(e); });
+})();
+</script>
+
+</body>
+</html>

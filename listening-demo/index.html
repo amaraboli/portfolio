@@ -1,0 +1,1752 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Listening Test Trainer — GT Oxford 2026</title>
+<style>
+  :root{
+    --bg:#181410;
+    --surface:#221d17;
+    --surface-2:#2b251d;
+    --surface-3:#332c22;
+    --line:#3a3228;
+    --line-soft:#2e271f;
+    --ivory:#ece3d2;
+    --ivory-dim:#bcae97;
+    --muted:#8c8069;
+    --muted-2:#675d4c;
+    --brass:#c79a4b;
+    --brass-bright:#e3b964;
+    --brass-deep:#9c7531;
+    --good:#6fae7d;
+    --bad:#cf6b62;
+
+    --p-medieval:#9683b8;
+    --p-renaissance:#5aa088;
+    --p-baroque:#cf8442;
+    --p-classical:#6b93c4;
+    --p-romantic:#c66585;
+
+    --display:"Hoefler Text","Baskerville","Didot",Georgia,"Times New Roman",serif;
+    --body:"Avenir Next","Helvetica Neue",-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
+    --mono:"SF Mono",ui-monospace,Menlo,Consolas,monospace;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(1100px 520px at 50% -8%, #2a2318 0%, transparent 62%),
+      var(--bg);
+    color:var(--ivory);
+    font-family:var(--body);
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+  }
+  .wrap{max-width:840px;margin:0 auto;padding:40px 22px 90px;}
+
+  /* ---------- masthead w/ staff motif ---------- */
+  .masthead{position:relative;text-align:center;margin-bottom:34px;padding:26px 0 22px;}
+  .masthead::before{
+    content:"";position:absolute;left:8%;right:8%;top:50%;transform:translateY(-50%);
+    height:34px;opacity:.16;pointer-events:none;
+    background:repeating-linear-gradient(to bottom,
+      transparent 0 7px, var(--ivory-dim) 7px 8px);
+    -webkit-mask:linear-gradient(to right, transparent, #000 18%, #000 82%, transparent);
+            mask:linear-gradient(to right, transparent, #000 18%, #000 82%, transparent);
+  }
+  .masthead .eyebrow{
+    position:relative;display:inline-block;
+    font-family:var(--mono);font-size:10.5px;letter-spacing:.34em;text-transform:uppercase;
+    color:var(--brass);background:var(--bg);padding:0 14px;margin-bottom:16px;
+  }
+  .masthead h1{
+    position:relative;display:inline-block;background:var(--bg);padding:0 22px;
+    font-family:var(--display);font-weight:500;font-size:clamp(34px,6vw,52px);
+    margin:0;letter-spacing:.005em;font-style:italic;
+  }
+  .masthead .sub{
+    position:relative;display:inline-block;background:var(--bg);padding:6px 16px 0;
+    color:var(--muted);font-size:13.5px;letter-spacing:.02em;margin-top:4px;
+  }
+
+  /* ---------- cards ---------- */
+  .card{
+    background:linear-gradient(180deg,var(--surface) 0%, #1c1812 100%);
+    border:1px solid var(--line);border-radius:16px;padding:26px;
+    box-shadow:0 22px 48px -28px rgba(0,0,0,.85);
+  }
+  .card + .card{margin-top:16px;}
+
+  .label{
+    font-family:var(--mono);font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--muted);margin:0 0 16px;display:flex;align-items:center;gap:9px;
+  }
+  .label::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--brass);}
+
+  /* ---------- segmented controls ---------- */
+  .seg{display:flex;gap:8px;flex-wrap:wrap;}
+  .seg button{
+    flex:1 1 calc(50% - 4px);min-width:130px;
+    background:var(--surface-2);color:var(--ivory-dim);
+    border:1px solid var(--line);border-radius:12px;
+    padding:14px 15px;font-family:var(--body);cursor:pointer;transition:.16s;text-align:left;
+  }
+  .seg button .t{display:block;font-size:14.5px;font-weight:600;color:var(--ivory);font-family:var(--display);letter-spacing:.01em;}
+  .seg button .d{display:block;font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.35;}
+  .seg button:hover{border-color:var(--muted-2);background:var(--surface-3);}
+  .seg button.active{
+    border-color:var(--brass);
+    background:linear-gradient(180deg,rgba(199,154,75,.15),rgba(199,154,75,.04));
+    box-shadow:inset 0 0 0 1px rgba(199,154,75,.32);
+  }
+
+  .row{display:flex;gap:20px;flex-wrap:wrap;align-items:flex-end;}
+  .field{flex:0 0 100px;}
+  .field.grow{flex:1 1 200px;}
+  .field label{display:block;font-size:11.5px;color:var(--muted);margin-bottom:7px;letter-spacing:.03em;}
+  .field .hint{font-size:12px;color:var(--muted-2);line-height:1.5;}
+  input[type=number],input[type=text]{
+    width:100%;background:var(--bg);color:var(--ivory);
+    border:1px solid var(--line);border-radius:10px;padding:12px 13px;
+    font-size:15px;font-family:var(--body);
+  }
+  input[type=text]:focus,input[type=number]:focus{outline:none;border-color:var(--brass);}
+  input.ok{border-color:var(--good);} input.no{border-color:var(--bad);}
+
+  .toggle-line{display:flex;align-items:center;gap:11px;margin-top:18px;font-size:13px;color:var(--ivory-dim);cursor:pointer;}
+  .toggle-line input{width:17px;height:17px;accent-color:var(--brass);}
+
+  /* ---------- buttons ---------- */
+  .btn{border:none;border-radius:12px;padding:14px 22px;font-size:15px;font-weight:600;cursor:pointer;font-family:var(--body);transition:.16s;}
+  .btn-gold{background:linear-gradient(180deg,var(--brass-bright),var(--brass));color:#241a07;}
+  .btn-gold:hover{filter:brightness(1.06);}
+  .btn-gold:disabled{background:var(--muted-2);color:#2a2419;cursor:not-allowed;filter:none;}
+  .btn-ghost{background:transparent;color:var(--ivory-dim);border:1px solid var(--line);}
+  .btn-ghost:hover{border-color:var(--muted-2);color:var(--ivory);}
+  .btn-block{width:100%;}
+  .btn-lg{padding:17px 24px;font-size:16px;letter-spacing:.01em;}
+  code{font-family:var(--mono);font-size:.88em;color:var(--brass);background:rgba(199,154,75,.09);padding:1px 6px;border-radius:5px;}
+
+  /* ---------- full list accordion ---------- */
+  .list-toggle{
+    width:100%;display:flex;align-items:center;justify-content:space-between;
+    background:linear-gradient(180deg,var(--surface) 0%, #1c1812 100%);
+    border:1px solid var(--line);border-radius:16px;padding:20px 24px;cursor:pointer;
+    font-family:var(--body);color:var(--ivory);transition:.16s;
+  }
+  .list-toggle:hover{border-color:var(--muted-2);}
+  .list-toggle .lt-main{display:flex;align-items:center;gap:13px;}
+  .list-toggle .lt-title{font-family:var(--display);font-size:18px;font-style:italic;}
+  .list-toggle .lt-count{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.12em;}
+  .chevron{transition:transform .25s;color:var(--brass);font-size:14px;}
+  .list-toggle.open .chevron{transform:rotate(180deg);}
+
+  .list-panel{overflow:hidden;max-height:0;transition:max-height .35s ease;}
+  .list-panel.open{max-height:2600px;}
+  .list-inner{
+    border:1px solid var(--line);border-top:none;border-radius:0 0 16px 16px;
+    margin-top:-16px;padding-top:16px;background:#1a1610;
+  }
+  .list-row{display:flex;align-items:center;gap:14px;padding:11px 20px;border-top:1px solid var(--line-soft);}
+  .list-row:hover{background:var(--surface);}
+  .lr-num{font-family:var(--mono);font-size:12px;color:var(--muted);width:22px;flex:0 0 22px;text-align:right;}
+  .lr-play{
+    flex:0 0 36px;width:36px;height:36px;border-radius:50%;border:1px solid var(--line);
+    background:var(--surface-2);color:var(--brass);cursor:pointer;display:grid;place-items:center;
+    font-size:13px;transition:.14s;
+  }
+  .lr-play:hover{border-color:var(--brass);background:var(--surface-3);}
+  .lr-play.playing{background:var(--brass);color:#241a07;border-color:var(--brass);}
+  .lr-play.dead{color:var(--muted-2);cursor:default;border-color:var(--line-soft);}
+  .lr-body{flex:1;min-width:0;}
+  .lr-title{font-size:14px;color:var(--ivory);line-height:1.3;}
+  .lr-comp{font-size:12px;color:var(--muted);}
+  .lr-period{flex:0 0 auto;}
+  .pglabel{font-family:var(--mono);font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;padding:3px 9px;border-radius:6px;color:#181410;font-weight:700;white-space:nowrap;background:#8a8270;}
+  .pglabel[data-p="Medieval"]{background:var(--p-medieval);}
+  .pglabel[data-p="Renaissance"]{background:var(--p-renaissance);}
+  .pglabel[data-p="Baroque"]{background:var(--p-baroque);}
+  .pglabel[data-p="Classical"]{background:var(--p-classical);}
+  .pglabel[data-p="Romantic"]{background:var(--p-romantic);}
+  /* Part Two styles */
+  .pglabel[data-p="Operetta"]{background:#c98f5a;}
+  .pglabel[data-p="Post-Romantic"]{background:#bd6a8c;}
+  .pglabel[data-p="Impressionist"]{background:#6fa8c4;}
+  .pglabel[data-p="Broadway"]{background:#d4794e;}
+  .pglabel[data-p="Ragtime"]{background:#c9a94e;}
+  .pglabel[data-p="20th Century Primitivism"]{background:#a0714f;}
+  .pglabel[data-p="20th Century Experimentalism"]{background:#8a7cb0;}
+  .pglabel[data-p="20th Century American"]{background:#5a8fa0;}
+  .pglabel[data-p="20th Century Neo-Classical"]{background:#7d9a6a;}
+  .pglabel[data-p="20th Century Film Music"]{background:#9a6a9a;}
+  .pglabel[data-p="20th Century Chicago Jazz"]{background:#b06a4e;}
+  .pglabel[data-p="20th Century Cool Jazz"]{background:#5a8aa8;}
+  .pglabel[data-p="20th Century Big Band Jazz"]{background:#a88a4e;}
+  .pglabel[data-p="20th Century Bebop Jazz"]{background:#9a5a6a;}
+  .pglabel[data-p="20th Century Urban Blues"]{background:#5a6a9a;}
+
+  /* ---------- quiz ---------- */
+  .quizbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;font-family:var(--mono);font-size:11.5px;color:var(--muted);letter-spacing:.1em;}
+  .quizbar .score{color:var(--brass);}
+  .progress{height:3px;background:var(--line);border-radius:99px;overflow:hidden;margin-bottom:24px;}
+  .progress > div{height:100%;background:linear-gradient(90deg,var(--brass),var(--brass-bright));width:0;transition:width .35s;}
+
+  .player{display:flex;align-items:center;gap:20px;background:linear-gradient(180deg,var(--surface-2),var(--surface));border:1px solid var(--line);border-radius:16px;padding:20px 22px;margin-bottom:24px;}
+  .playbtn{
+    position:relative;width:64px;height:64px;flex:0 0 64px;border-radius:50%;border:none;cursor:pointer;
+    background:linear-gradient(180deg,var(--brass-bright),var(--brass));
+    display:grid;place-items:center;transition:.16s;
+    box-shadow:0 6px 18px -6px rgba(199,154,75,.55);
+  }
+  .playbtn:hover{transform:scale(1.05);filter:brightness(1.05);}
+  /* triangle (play) drawn with borders */
+  .playbtn .ic-play{
+    width:0;height:0;margin-left:4px;
+    border-top:14px solid transparent;border-bottom:14px solid transparent;
+    border-left:22px solid #241a07;
+  }
+  /* square (pause/stop) */
+  .playbtn .ic-stop{
+    width:22px;height:22px;border-radius:3px;background:#241a07;
+  }
+  .player .meta{flex:1;min-width:0;}
+  .player .nowlabel{font-family:var(--mono);font-size:9.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--muted);}
+  .player .timeline{height:5px;background:var(--line);border-radius:99px;margin-top:11px;overflow:hidden;cursor:pointer;}
+  .player .timeline.locked{cursor:default;opacity:.7;}
+  .player .timeline > div{height:100%;background:var(--brass);width:0;}
+  .player .times{display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:7px;}
+  .replay{background:transparent;border:1px solid var(--line);color:var(--ivory-dim);border-radius:9px;padding:9px 13px;font-size:12px;cursor:pointer;font-family:var(--body);}
+  .replay:hover{border-color:var(--muted-2);}
+
+  .bank{margin-bottom:24px;}
+  .bank h4{font-family:var(--mono);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin:0 0 12px;}
+  .bank-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(195px,1fr));gap:8px;}
+  .chip{background:var(--surface-2);border:1px solid var(--line);border-radius:9px;padding:9px 12px;font-size:13px;color:var(--ivory-dim);line-height:1.32;}
+  .chip small{color:var(--muted);display:block;font-size:11px;margin-top:1px;}
+
+  .answers{display:flex;flex-direction:column;gap:18px;}
+  .ans-field label{display:block;font-size:11.5px;color:var(--muted);margin-bottom:8px;letter-spacing:.05em;text-transform:uppercase;font-family:var(--mono);}
+
+  .choices{display:grid;grid-template-columns:1fr 1fr;gap:9px;}
+  .choice{background:var(--surface-2);border:1px solid var(--line);color:var(--ivory);border-radius:10px;padding:12px 14px;font-size:14px;cursor:pointer;text-align:left;transition:.13s;font-family:var(--body);}
+  .choice:hover{border-color:var(--muted-2);}
+  .choice.sel{border-color:var(--brass);background:rgba(199,154,75,.12);}
+  .choice.correct{border-color:var(--good);background:rgba(111,174,125,.16);}
+  .choice.wrong{border-color:var(--bad);background:rgba(207,107,98,.16);}
+
+  .periods{display:flex;gap:8px;flex-wrap:wrap;}
+  .period-chip{border:1px solid var(--line);background:var(--surface-2);color:var(--ivory-dim);border-radius:99px;padding:9px 17px;font-size:13px;cursor:pointer;transition:.13s;font-weight:600;}
+  .period-chip:hover{filter:brightness(1.15);}
+  .period-chip.sel{color:#181410;}
+  .period-chip[data-p="Medieval"].sel{background:var(--p-medieval);border-color:var(--p-medieval);}
+  .period-chip[data-p="Renaissance"].sel{background:var(--p-renaissance);border-color:var(--p-renaissance);}
+  .period-chip[data-p="Baroque"].sel{background:var(--p-baroque);border-color:var(--p-baroque);}
+  .period-chip[data-p="Classical"].sel{background:var(--p-classical);border-color:var(--p-classical);}
+  .period-chip[data-p="Romantic"].sel{background:var(--p-romantic);border-color:var(--p-romantic);}
+
+  .feedback{margin-top:22px;border-radius:13px;padding:18px 20px;border:1px solid var(--line);background:var(--surface-2);display:none;}
+  .feedback.show{display:block;}
+  .feedback .verdict{font-family:var(--display);font-size:22px;font-style:italic;margin:0 0 11px;}
+  .feedback.right .verdict{color:var(--good);}
+  .feedback.wrong .verdict{color:var(--bad);}
+  .feedback .line{font-size:14px;margin:5px 0;color:var(--ivory-dim);}
+  .feedback .line b{color:var(--ivory);}
+  .feedback .you{color:var(--muted);font-size:13px;}
+
+  .quiz-actions{display:flex;gap:11px;margin-top:24px;}
+  .footnote{text-align:center;color:var(--muted-2);font-size:11.5px;margin-top:28px;font-family:var(--mono);letter-spacing:.08em;}
+
+  .result-head{text-align:center;margin-bottom:26px;}
+  .result-head .big{font-family:var(--display);font-size:58px;line-height:1;color:var(--brass);font-style:italic;}
+  .result-head .pct{color:var(--muted);font-family:var(--mono);margin-top:10px;letter-spacing:.1em;font-size:12px;}
+  .review-row{display:flex;gap:13px;align-items:flex-start;padding:13px 0;border-top:1px solid var(--line-soft);}
+  .review-row:first-child{border-top:none;}
+  .review-mark{flex:0 0 auto;width:23px;height:23px;border-radius:50%;display:grid;place-items:center;font-size:13px;margin-top:2px;}
+  .review-mark.ok{background:rgba(111,174,125,.2);color:var(--good);}
+  .review-mark.no{background:rgba(207,107,98,.2);color:var(--bad);}
+  .review-body{flex:1;min-width:0;}
+  .review-body .tt{font-size:15px;color:var(--ivory);}
+  .review-body .cc{font-size:13px;color:var(--muted);margin-top:1px;}
+
+  .hidden{display:none !important;}
+  .miss-warn{color:var(--bad);font-size:12.5px;margin-top:10px;line-height:1.5;}
+  a.link{color:var(--brass);cursor:pointer;text-decoration:none;border-bottom:1px dotted var(--brass-deep);}
+
+  /* ---------- folder picker ---------- */
+  .folder-picker{
+    display:flex;align-items:center;gap:16px;
+    background:linear-gradient(180deg,var(--surface) 0%, #1c1812 100%);
+    border:1px solid var(--line);border-radius:16px;padding:18px 22px;cursor:pointer;
+    transition:.16s;
+  }
+  .folder-picker:hover{border-color:var(--muted-2);}
+  .folder-picker.loaded{border-color:var(--good);}
+  .fp-icon{font-size:28px;color:var(--brass);line-height:1;flex:0 0 auto;}
+  .fp-main{flex:1;}
+  .fp-title{font-family:var(--display);font-size:17px;font-style:italic;color:var(--ivory);}
+  .fp-sub{font-size:12px;color:var(--muted);margin-top:3px;}
+  .fp-badge{background:var(--good);color:#141a14;font-family:var(--mono);font-size:11px;font-weight:700;
+    padding:4px 10px;border-radius:99px;letter-spacing:.08em;}
+  .fp-status{font-size:12px;color:var(--muted);margin-top:8px;line-height:1.6;padding:0 4px;}
+  .fp-status.ok{color:var(--good);}
+  .fp-status.warn{color:var(--brass);}
+
+
+  /* ---------- list row scrubber ---------- */
+  .list-row-wrap{border-top:1px solid var(--line-soft);}
+  .list-row-wrap:first-child{border-top:none;}
+  .list-row-wrap .list-row{border-top:none;}
+  .lr-scrub{display:none;align-items:center;gap:11px;padding:0 20px 13px 72px;}
+  .lr-scrub.open{display:flex;}
+  .lr-cur,.lr-dur{font-family:var(--mono);font-size:10px;color:var(--muted);min-width:30px;}
+  .lr-dur{text-align:right;}
+  .lr-slider{
+    -webkit-appearance:none;appearance:none;flex:1;height:4px;border-radius:99px;
+    background:var(--line);outline:none;cursor:pointer;
+  }
+  .lr-slider::-webkit-slider-thumb{
+    -webkit-appearance:none;appearance:none;width:14px;height:14px;border-radius:50%;
+    background:var(--brass);cursor:pointer;border:2px solid var(--bg);
+  }
+  .lr-slider::-moz-range-thumb{width:14px;height:14px;border-radius:50%;background:var(--brass);cursor:pointer;border:2px solid var(--bg);}
+
+
+  .chip{cursor:pointer;transition:.13s;user-select:none;}
+  .chip:hover{border-color:var(--muted-2);}
+  .chip.struck{opacity:.4;text-decoration:line-through;text-decoration-color:var(--bad);text-decoration-thickness:2px;}
+  .chip.struck small{text-decoration:line-through;}
+  .bank-hint{font-family:var(--body);font-size:10px;color:var(--muted-2);text-transform:none;letter-spacing:0;font-weight:400;font-style:italic;}
+
+
+  /* ---------- results extras ---------- */
+  .breakdown{display:flex;gap:10px;margin-bottom:24px;}
+  .bd-item{flex:1;background:var(--surface-2);border:1px solid var(--line);border-radius:11px;padding:13px 10px;text-align:center;}
+  .bd-label{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);}
+  .bd-val{display:block;font-family:var(--display);font-size:22px;color:var(--ivory);margin-top:4px;}
+  .review-mark.partial{background:rgba(199,154,75,.2);color:var(--brass);}
+  .cmarks{margin-top:6px;display:flex;gap:10px;flex-wrap:wrap;}
+  .cmk{font-family:var(--mono);font-size:10.5px;letter-spacing:.04em;}
+  .cmk.y{color:var(--good);}
+  .cmk.n{color:var(--bad);}
+  .your-ans{margin-top:5px;font-size:11.5px;color:var(--muted);font-style:italic;}
+
+
+  /* ---------- how to use ---------- */
+  .howto-toggle{
+    width:100%;display:flex;align-items:center;justify-content:space-between;
+    background:transparent;border:1px dashed var(--line);border-radius:14px;
+    padding:15px 22px;cursor:pointer;transition:.16s;margin-bottom:16px;
+  }
+  .howto-toggle:hover{border-color:var(--brass);}
+  .howto-toggle .lt-main{display:flex;align-items:center;gap:12px;}
+  .howto-toggle .lt-title{font-family:var(--display);font-size:16px;font-style:italic;color:var(--ivory-dim);}
+  .howto-icon{
+    width:22px;height:22px;border-radius:50%;background:var(--brass);color:#241a07;
+    display:grid;place-items:center;font-weight:700;font-size:13px;font-family:var(--body);flex:0 0 auto;
+  }
+  .howto-toggle.open .chevron{transform:rotate(180deg);}
+  .howto-panel{overflow:hidden;max-height:0;transition:max-height .35s ease;}
+  .howto-panel.open{max-height:900px;}
+  .howto-inner{
+    border:1px solid var(--line);border-radius:14px;padding:22px 24px;margin-bottom:16px;
+    background:linear-gradient(180deg,var(--surface) 0%, #1c1812 100%);
+  }
+  .howto-lead{margin:0 0 16px;font-size:14px;color:var(--ivory-dim);line-height:1.6;}
+  .howto-steps{margin:0;padding-left:22px;display:flex;flex-direction:column;gap:13px;}
+  .howto-steps li{font-size:13.5px;color:var(--ivory-dim);line-height:1.6;padding-left:4px;}
+  .howto-steps li b{color:var(--ivory);}
+  .howto-steps li::marker{color:var(--brass);font-family:var(--display);font-weight:700;}
+  .howto-note{margin:16px 0 0;font-size:12.5px;color:var(--muted);line-height:1.6;font-style:italic;}
+
+
+  /* ---------- live waveform ---------- */
+  .waveform{display:block;width:100%;height:38px;margin:2px 0 4px;}
+
+
+  /* ---------- mastery hero ---------- */
+  .mastery-card{
+    background:
+      radial-gradient(120% 140% at 0% 0%, rgba(199,154,75,.10), transparent 55%),
+      linear-gradient(180deg,var(--surface) 0%, #1c1812 100%);
+    border:1px solid var(--line);border-radius:18px;padding:22px 24px;margin-bottom:16px;
+    box-shadow:0 22px 48px -28px rgba(0,0,0,.85);
+  }
+  .mastery-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:18px;flex-wrap:wrap;}
+  .mastery-title{font-family:var(--display);font-style:italic;font-size:21px;color:var(--ivory);}
+  .mastery-sub{font-size:12px;color:var(--muted);margin-top:3px;}
+  .mastery-stats{display:flex;gap:18px;}
+  .mstat{text-align:center;}
+  .mstat-n{display:block;font-family:var(--display);font-style:italic;font-size:24px;color:var(--brass);line-height:1;}
+  .mstat-l{display:block;font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:5px;}
+  .mastery-map{display:grid;grid-template-columns:repeat(14,1fr);gap:5px;margin-bottom:14px;}
+  .mcell{aspect-ratio:1;border-radius:6px;display:grid;place-items:center;cursor:pointer;
+    font-family:var(--mono);font-size:9px;transition:transform .15s, box-shadow .15s;border:1px solid transparent;}
+  .mcell span{opacity:.55;}
+  .mcell:hover{transform:translateY(-2px) scale(1.08);box-shadow:0 6px 14px -4px rgba(0,0,0,.6);z-index:2;}
+  .mcell.pulse{animation:cellpulse .6s ease;}
+  @keyframes cellpulse{0%{transform:scale(1)}40%{transform:scale(1.3)}100%{transform:scale(1)}}
+  .ml0{background:#2a2419;color:var(--muted-2);}
+  .ml1{background:#5a3a3a;color:#e8c4c4;}
+  .ml2{background:#6a5733;color:#f0dca8;}
+  .ml3{background:#4f7a5e;color:#dff0e4;}
+  .ml4{background:linear-gradient(135deg,var(--brass-bright),var(--brass));color:#241a07;box-shadow:0 0 12px -2px rgba(227,185,100,.5);}
+  .mastery-legend{display:flex;gap:14px;flex-wrap:wrap;font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;color:var(--muted);text-transform:uppercase;}
+  .mastery-legend span{display:flex;align-items:center;gap:5px;}
+  .ml{width:11px;height:11px;border-radius:3px;display:inline-block;}
+  @media(max-width:560px){ .mastery-map{grid-template-columns:repeat(7,1fr);} }
+
+
+  /* ================= MOTION & DRAMA ================= */
+  @keyframes screenIn{from{opacity:0;transform:translateY(14px) scale(.99);}to{opacity:1;transform:none;}}
+  @keyframes screenOut{from{opacity:1;transform:none;}to{opacity:0;transform:translateY(-10px) scale(.99);}}
+  .screen-in{animation:screenIn .42s cubic-bezier(.2,.7,.2,1);}
+  .screen-out{animation:screenOut .24s ease forwards;}
+
+  @keyframes reveal{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
+  .reveal{opacity:0;animation:reveal .5s cubic-bezier(.2,.7,.2,1) forwards;}
+
+  /* animated staff lines breathing behind the title */
+  @keyframes staffDraw{from{opacity:0;transform:translateY(-50%) scaleX(.4);}to{opacity:.16;transform:translateY(-50%) scaleX(1);}}
+  .masthead::before{animation:staffDraw 1.4s cubic-bezier(.2,.7,.2,1) both;transform-origin:center;}
+  @keyframes glowPulse{0%,100%{opacity:.5;}50%{opacity:.85;}}
+  .masthead h1{animation:titleIn 1s cubic-bezier(.2,.7,.2,1) both;}
+  @keyframes titleIn{from{opacity:0;letter-spacing:.12em;filter:blur(6px);}to{opacity:1;letter-spacing:.005em;filter:none;}}
+
+  /* film grain + slow ambient glow */
+  body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:9999;opacity:.035;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
+  body::before{content:"";position:fixed;top:-15%;left:50%;transform:translateX(-50%);width:90%;height:340px;
+    pointer-events:none;z-index:-1;background:radial-gradient(60% 100% at 50% 0%, rgba(199,154,75,.10), transparent 70%);
+    animation:glowPulse 7s ease-in-out infinite;}
+
+  /* tactile button press */
+  .btn:active{transform:translateY(1px) scale(.99);}
+  .playbtn:active{transform:scale(.96);}
+
+  /* ================= GRADE RING ================= */
+  .result-hero{text-align:center;}
+  .grade-wrap{position:relative;width:170px;height:170px;margin:6px auto 8px;}
+  .grade-ring{width:170px;height:170px;transform:rotate(-90deg);}
+  .gr-track{fill:none;stroke:var(--line);stroke-width:9;}
+  .gr-fill{fill:none;stroke:var(--brass);stroke-width:9;stroke-linecap:round;
+    transition:stroke-dashoffset 1.1s cubic-bezier(.2,.7,.2,1);}
+  .grade-center{position:absolute;inset:0;display:grid;place-items:center;}
+  .grade-letter{font-family:var(--display);font-style:italic;font-size:46px;line-height:1;}
+  .grade-letter.pop{animation:gradePop .5s cubic-bezier(.2,1.4,.4,1);}
+  @keyframes gradePop{0%{transform:scale(.4);opacity:0;}60%{transform:scale(1.15);}100%{transform:scale(1);opacity:1;}}
+  .grade-pct{font-family:var(--mono);font-size:14px;color:var(--ivory-dim);letter-spacing:.06em;margin-top:2px;}
+  .grade-sub{color:var(--muted);font-family:var(--mono);font-size:12px;letter-spacing:.08em;margin-bottom:22px;}
+
+  /* ================= PERIOD HEATMAP ================= */
+  .heatmap-wrap{margin-top:6px;}
+  .heat-title{font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;}
+  .heatmap{display:flex;gap:10px;justify-content:center;align-items:flex-end;}
+  .heat-cell{display:flex;flex-direction:column;align-items:center;gap:6px;flex:1;max-width:80px;}
+  .heat-bar-track{width:100%;height:70px;background:var(--surface-2);border-radius:8px;display:flex;align-items:flex-end;overflow:hidden;}
+  .heat-bar{width:100%;border-radius:8px;transition:height .9s cubic-bezier(.2,.7,.2,1);min-height:3px;}
+  .heat-bar[data-p="Medieval"]{background:var(--p-medieval);}
+  .heat-bar[data-p="Renaissance"]{background:var(--p-renaissance);}
+  .heat-bar[data-p="Baroque"]{background:var(--p-baroque);}
+  .heat-bar[data-p="Classical"]{background:var(--p-classical);}
+  .heat-bar[data-p="Romantic"]{background:var(--p-romantic);}
+  .heat-acc{font-family:var(--mono);font-size:12px;color:var(--ivory);}
+  .heat-name{font-family:var(--mono);font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);}
+  .review-title{font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;}
+
+
+  .period-choices{grid-template-columns:repeat(auto-fit,minmax(130px,1fr));}
+
+
+  .chip{display:flex;align-items:center;justify-content:space-between;gap:8px;cursor:default;}
+  .chip-text{flex:1;cursor:pointer;padding:2px 0;border-radius:5px;transition:.12s;}
+  .chip-text:hover{color:var(--ivory);text-shadow:0 0 10px rgba(199,154,75,.35);}
+  .chip-x{flex:0 0 auto;width:20px;height:20px;border-radius:50%;border:1px solid var(--line);
+    background:transparent;color:var(--muted);font-size:10px;cursor:pointer;display:grid;place-items:center;
+    transition:.12s;}
+  .chip-x:hover{border-color:var(--bad);color:var(--bad);}
+  .chip.struck .chip-x{border-color:var(--bad);color:var(--bad);}
+  input.filled{animation:fillFlash .5s ease;}
+  @keyframes fillFlash{0%{background:rgba(199,154,75,.35);}100%{background:var(--bg);}}
+
+
+  /* ---------- exam part switcher ---------- */
+  .part-switch{display:flex;gap:8px;margin-bottom:16px;background:var(--surface-2);
+    border:1px solid var(--line);border-radius:14px;padding:6px;}
+  .part-switch button{flex:1;background:transparent;border:none;border-radius:10px;
+    padding:12px 14px;cursor:pointer;font-family:var(--display);font-style:italic;font-size:17px;
+    color:var(--muted);transition:.16s;display:flex;flex-direction:column;align-items:center;gap:1px;}
+  .part-switch button span{font-family:var(--mono);font-style:normal;font-size:9px;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--muted-2);}
+  .part-switch button:hover{color:var(--ivory-dim);}
+  .part-switch button.active{background:linear-gradient(180deg,var(--brass-bright),var(--brass));color:#241a07;
+    box-shadow:0 4px 14px -4px rgba(199,154,75,.5);}
+  .part-switch button.active span{color:#3a2c0e;}
+
+
+  .seg-sm{display:flex;gap:8px;}
+  .seg-sm button{flex:1;padding:10px 12px;}
+  .seg-sm .t{font-size:14px;}
+
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="masthead">
+    <div class="eyebrow">Music 3621 · Midterm Listening</div>
+    <h1>The Listening Room</h1>
+    <div class="sub">Hear the excerpt — name the work, the composer, the period.</div>
+  </div>
+
+  <!-- ============ SETUP ============ -->
+  <div id="setup">
+
+    <!-- exam part switcher -->
+    <div class="part-switch" id="partSwitch">
+      <button data-part="1" class="active">Part One <span>Exam 1</span></button>
+      <button data-part="2">Part Two <span>Exam 2</span></button>
+    </div>
+
+    <!-- how to use dropdown -->
+    <div class="howto-toggle" id="howtoToggle">
+      <div class="lt-main">
+        <span class="howto-icon">?</span>
+        <span class="lt-title">How to use this</span>
+      </div>
+      <span class="chevron">▾</span>
+    </div>
+    <div class="howto-panel" id="howtoPanel">
+      <div class="howto-inner">
+        <p class="howto-lead">Setup takes one minute:</p>
+        <ol class="howto-steps">
+          <li><b>Unzip the folder.</b> It contains <code>index.html</code> and the tracks <code>Song1.mp3 … Song27.mp3</code>. Keep them all in the same folder.</li>
+          <li><b>Open <code>index.html</code></b> — double-click to launch it in a browser (Chrome or Safari).</li>
+          <li><b>Pick the exam</b> (Part One / Part Two) at the top, then <b>click "Select your music folder"</b> and choose that exam's folder. It turns green once the tracks load.</li>
+          <li><b>Pick settings and hit Begin session.</b></li>
+        </ol>
+      </div>
+    </div>
+
+    <!-- full list dropdown -->
+    <div class="list-toggle" id="listToggle">
+      <div class="lt-main">
+        <span class="lt-title">Full listening list</span>
+        <span class="lt-count" id="ltCount">28 pieces</span>
+      </div>
+      <span class="chevron">▾</span>
+    </div>
+    <div class="list-panel" id="listPanel">
+      <div class="list-inner" id="listInner"></div>
+    </div>
+
+    <div class="card" style="margin-top:16px;">
+      <p class="label">Difficulty</p>
+      <div class="seg" id="modeSel">
+        <button data-mode="mc"><span class="t">Multiple choice</span><span class="d">Pick everything from options. Easiest.</span></button>
+        <button data-mode="exam" class="active"><span class="t">Exam mode</span><span class="d">Title word bank; composer &amp; period from memory. Matches the real test.</span></button>
+        <button data-mode="blank"><span class="t">Fill in the blank</span><span class="d">No bank. All three from memory. Hardest.</span></button>
+      </div>
+    </div>
+
+    <div class="card">
+      <p class="label">Order &amp; range</p>
+      <div class="seg" id="orderSel" style="margin-bottom:20px;">
+        <button data-order="ordered" class="active"><span class="t">In order</span><span class="d">Plays low → high. Bank positions scrambled so order won't give it away.</span></button>
+        <button data-order="shuffle"><span class="t">Shuffled</span><span class="d">Random play order within your range.</span></button>
+      </div>
+      <div class="seg seg-sm" id="selSel" style="margin-bottom:14px;">
+        <button data-sel="range" class="active"><span class="t">A range</span></button>
+        <button data-sel="pick"><span class="t">Specific pieces</span></button>
+      </div>
+      <div class="row" id="rangeRow">
+        <div class="field"><label>From&nbsp;#</label><input type="number" id="rangeStart" min="1" max="28" value="1"></div>
+        <div class="field"><label>To&nbsp;#</label><input type="number" id="rangeEnd" min="1" max="28" value="10"></div>
+        <div class="field grow"><div class="hint" id="rangeHint">Any stretch of the 28 pieces.</div></div>
+      </div>
+      <div class="row hidden" id="pickRow">
+        <div class="field grow"><label>Pieces&nbsp;#</label><input type="text" id="pickList" placeholder="e.g. 4, 5, 7, 9, 11" autocomplete="off"></div>
+        <div class="field grow"><div class="hint" id="pickHint">Type the exact numbers you want, separated by commas.</div></div>
+      </div>
+      <label class="toggle-line"><input type="checkbox" id="randomStart"> Random start point &nbsp;<span style="color:var(--muted-2)">— begins at a random spot in the piece</span></label>
+      <label class="toggle-line" style="margin-top:10px;"><input type="checkbox" id="lockScrub"> Exam lock &nbsp;<span style="color:var(--muted-2)">— no scrubbing or replay; pause/play only</span></label>
+      <label class="toggle-line" style="margin-top:10px;"><input type="checkbox" id="examTiming"> Exam timing &nbsp;<span style="color:var(--muted-2)">— hides length, plays one 30-second clip then stops</span></label>
+    </div>
+
+    <div style="margin-top:22px;">
+      <div id="folderPickerWrap" style="margin-bottom:14px;">
+        <div class="folder-picker" id="folderPicker">
+          <div class="fp-icon">♩</div>
+          <div class="fp-main">
+            <div class="fp-title">Select your music folder</div>
+            <div class="fp-sub" id="fpSub">Pick the folder containing Song1.mp3 … Song27.mp3</div>
+          </div>
+          <div class="fp-badge hidden" id="fpBadge">27 / 27</div>
+        </div>
+        <input type="file" id="folderInput" webkitdirectory multiple accept="audio/*" style="display:none">
+        <div class="fp-status hidden" id="fpStatus"></div>
+      </div>
+      <button class="btn btn-gold btn-block btn-lg" id="startBtn">Begin session</button>
+      <div class="miss-warn hidden" id="startWarn"></div>
+    </div>
+  </div>
+
+  <!-- ============ QUIZ ============ -->
+  <div id="quiz" class="hidden">
+    <div class="quizbar"><span id="qCount">Question 1 of 10</span><span class="score" id="qScore">0 / 0</span></div>
+    <div class="progress"><div id="qProgress"></div></div>
+
+    <div class="player">
+      <button class="playbtn" id="playBtn" aria-label="Play excerpt"><span class="ic-play" id="playIcon"></span></button>
+      <div class="meta">
+        <div class="nowlabel">Now playing — excerpt</div>
+        <canvas id="waveform" class="waveform"></canvas>
+        <div class="timeline" id="timeline"><div id="timelineFill"></div></div>
+        <div class="times"><span id="curTime">0:00</span><span id="durTime">0:00</span></div>
+      </div>
+      <button class="replay" id="replayBtn">↻ Replay</button>
+    </div>
+
+    <div class="bank hidden" id="bank"><h4 id="bankTitle">Word bank</h4><div class="bank-grid" id="bankGrid"></div></div>
+
+    <div class="answers">
+      <div class="ans-field" id="titleField"><label>Title</label><div id="titleInputArea"></div></div>
+      <div class="ans-field" id="composerField"><label>Composer</label><div id="composerInputArea"></div></div>
+      <div class="ans-field" id="periodField"><label>Period</label><div id="periodInputArea"></div></div>
+    </div>
+
+    <div class="feedback" id="feedback">
+      <div class="verdict" id="verdict"></div>
+      <div class="line"><b id="fbTitle"></b></div>
+      <div class="line">by <b id="fbComposer"></b> · <span id="fbPeriod"></span></div>
+      <div class="line you" id="fbYou"></div>
+    </div>
+
+    <div class="quiz-actions">
+      <button class="btn btn-ghost" id="quitBtn">End session</button>
+      <button class="btn btn-gold" id="submitBtn" style="flex:1;">Check answer</button>
+      <button class="btn btn-gold hidden" id="nextBtn" style="flex:1;">Next ›</button>
+    </div>
+    <div class="footnote">Space — play / pause · Enter — check / next</div>
+  </div>
+
+  <!-- ============ RESULTS ============ -->
+  <div id="results" class="hidden">
+    <div class="card result-hero">
+      <div class="grade-wrap">
+        <svg class="grade-ring" id="gradeRing" viewBox="0 0 140 140">
+          <circle class="gr-track" cx="70" cy="70" r="62"/>
+          <circle class="gr-fill" id="grFill" cx="70" cy="70" r="62"/>
+        </svg>
+        <div class="grade-center">
+          <div class="grade-letter" id="gradeLetter">—</div>
+          <div class="grade-pct" id="resScore">0%</div>
+        </div>
+      </div>
+      <div class="grade-sub" id="resPct"></div>
+      <div class="breakdown" id="resBreakdown"></div>
+      <div class="heatmap-wrap" id="heatWrap">
+        <div class="heat-title">By period</div>
+        <div class="heatmap" id="heatmap"></div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:14px;">
+      <div class="review-title">Piece by piece</div>
+      <div id="reviewList"></div>
+    </div>
+
+    <div class="mastery-card" id="masteryCard" style="margin-top:14px;">
+      <div class="mastery-head">
+        <div>
+          <div class="mastery-title">Your mastery</div>
+          <div class="mastery-sub" id="masterySub">28 pieces</div>
+        </div>
+        <div class="mastery-stats" id="masteryStats"></div>
+      </div>
+      <div class="mastery-map" id="masteryMap"></div>
+      <div class="mastery-legend">
+        <span><i class="ml ml0"></i>untried</span>
+        <span><i class="ml ml1"></i>weak</span>
+        <span><i class="ml ml2"></i>learning</span>
+        <span><i class="ml ml3"></i>strong</span>
+        <span><i class="ml ml4"></i>mastered</span>
+      </div>
+    </div>
+
+    <div class="quiz-actions">
+      <button class="btn btn-ghost" id="retryMissed" style="flex:1;">Retry the misses</button>
+      <button class="btn btn-gold" id="restartBtn" style="flex:1;">New session</button>
+    </div>
+  </div>
+
+</div>
+
+<audio id="audio" preload="none"></audio>
+<audio id="preview" preload="none"></audio>
+
+<script>
+/* ===================== DATA ===================== */
+const PERIODS1 = ["Medieval","Renaissance","Baroque","Classical","Romantic"];
+const PERIODS2 = ["Operetta","Post-Romantic","Romantic","Impressionist","20th Century Primitivism","20th Century Experimentalism","20th Century American","20th Century Neo-Classical","Broadway","20th Century Film Music","20th Century Chicago Jazz","20th Century Cool Jazz","20th Century Big Band Jazz","Ragtime","20th Century Bebop Jazz","20th Century Urban Blues"];
+// ===================== PART ONE DATA =====================
+const SONGS1 = [
+  {id:1, title:"Mass Cum jubilo, Kyrie", composer:"Anonymous", last:["anonymous","anon"], period:"Medieval", accept:["cum jubilo","mass cum jubilo","kyrie cum jubilo"]},
+  {id:2, title:"Sumer is icumen in", composer:"Anonymous", last:["anonymous","anon"], period:"Medieval", accept:["sumer is icumen in","sumer is icumen","sumer"]},
+  {id:3, title:"Nunc aperuit nobis", composer:"Hildegard of Bingen", last:["hildegard","bingen"], period:"Medieval", accept:["nunc aperuit nobis","nunc aperuit"]},
+  {id:4, title:"Messe de Nostre Dame, Gloria", composer:"Guillaume de Machaut", last:["machaut"], period:"Medieval", accept:["messe de nostre dame","nostre dame","messe de nostre dame gloria"]},
+  {id:5, title:"Ein' Feste Burg", composer:"Martin Luther", last:["luther"], period:"Renaissance", accept:["ein feste burg","feste burg","a mighty fortress"]},
+  {id:6, title:"Pope Marcellus Mass, Agnus Dei I", composer:"Giovanni Pierluigi da Palestrina", last:["palestrina"], period:"Renaissance", accept:["pope marcellus mass","pope marcellus","marcellus mass","agnus dei"]},
+  {id:7, title:"Sonata pian'e forte", composer:"Giovanni Gabrieli", last:["gabrieli"], period:"Renaissance", accept:["sonata pian e forte","pian e forte","sonata piane forte"]},
+  {id:8, title:"Cantata No. 140, Wachet auf", composer:"Johann Sebastian Bach", last:["bach"], period:"Baroque", accept:["wachet auf","cantata no 140","cantata 140","cantata no. 140 wachet auf"]},
+  {id:9, title:"The Messiah, Hallelujah Chorus", composer:"George Frideric Handel", last:["handel"], period:"Baroque", accept:["messiah","the messiah","hallelujah chorus","hallelujah"]},
+  {id:10, title:"L'Orfeo, Tu se' morta", composer:"Claudio Monteverdi", last:["monteverdi"], period:"Baroque", accept:["orfeo","lorfeo","tu se morta","l orfeo tu se morta"]},
+  {id:11, title:"Dido and Aeneas, Thy hand, Belinda", composer:"Henry Purcell", last:["purcell"], period:"Baroque", accept:["thy hand belinda","thy hand, belinda","dido and aeneas thy hand"]},
+  {id:12, title:"Dido and Aeneas, When I Am Laid in Earth", composer:"Henry Purcell", last:["purcell"], period:"Baroque", accept:["when i am laid in earth","laid in earth","dido and aeneas when i am laid in earth"]},
+  {id:13, title:"Brandenburg Concerto No. 2 in F Major (Movement I)", composer:"Johann Sebastian Bach", last:["bach"], period:"Baroque", accept:["brandenburg concerto no 2","brandenburg concerto no. 2","brandenburg 2","brandenburg concerto no 2 in f major"]},
+  {id:14, title:"Fugue in G Minor (\"Little Fugue\")", composer:"Johann Sebastian Bach", last:["bach"], period:"Baroque", accept:["little fugue","fugue in g minor","fugue in g","g minor fugue"]},
+  {id:15, title:"The Four Seasons, Spring Concerto (Movement I)", composer:"Antonio Vivaldi", last:["vivaldi"], period:"Baroque", accept:["four seasons spring","spring concerto","the four seasons spring","four seasons"]},
+  {id:16, title:"Ordre 18, Le tic-toc-choc", composer:"Francois Couperin", last:["couperin"], period:"Baroque", accept:["tic toc choc","le tic toc choc","ordre 18","le tic-toc-choc"]},
+  {id:17, title:"String Quartet in G Major, Op. 77, No. 1 (3rd movement)", composer:"Franz Joseph Haydn", last:["haydn"], period:"Classical", accept:["string quartet in g major op 77","string quartet op 77 no 1","op 77 no 1","string quartet g major"]},
+  {id:18, title:"Concerto for Flute and Orchestra in D Major, K. 314 (3rd movement)", composer:"Wolfgang Amadeus Mozart", last:["mozart"], period:"Classical", accept:["flute concerto","concerto for flute","flute and orchestra k 314","k 314"]},
+  {id:19, title:"Symphony No. 40 in G Minor, K. 550 (1st movement)", composer:"Wolfgang Amadeus Mozart", last:["mozart"], period:"Classical", accept:["symphony no 40","symphony no. 40","symphony 40","k 550","symphony no 40 in g minor"]},
+  {id:20, title:"The Marriage of Figaro", composer:"Wolfgang Amadeus Mozart", last:["mozart"], period:"Classical", accept:["marriage of figaro","the marriage of figaro","figaro","le nozze di figaro"]},
+  {id:21, title:"Requiem, Dies Irae", composer:"Wolfgang Amadeus Mozart", last:["mozart"], period:"Classical", accept:["dies irae","requiem dies irae","requiem"]},
+  {id:22, title:"Piano Sonata in C Minor, Op. 13 (1st movement)", composer:"Ludwig van Beethoven", last:["beethoven"], period:"Classical", accept:["pathetique","piano sonata op 13","op 13","piano sonata in c minor","sonata pathetique","pathetique sonata"]},
+  {id:23, title:"Symphony No. 5 in C Minor (1st movement)", composer:"Ludwig van Beethoven", last:["beethoven"], period:"Classical", accept:["symphony no 5","symphony no. 5","symphony 5","fifth symphony","symphony no 5 in c minor"]},
+  {id:24, title:"Erlkönig (The Erlking)", composer:"Franz Schubert", last:["schubert"], period:"Romantic", accept:["erlkonig","erlking","the erlking","der erlkonig"]},
+  {id:25, title:"Symphonie fantastique (5th movement, Dream of a Witches' Sabbath)", composer:"Hector Berlioz", last:["berlioz"], period:"Romantic", accept:["symphonie fantastique","fantastique","witches sabbath","dream of a witches sabbath"]},
+  {id:26, title:"Nocturne in Eb Major, Op. 9, No. 2", composer:"Frederic Chopin", last:["chopin"], period:"Romantic", accept:["nocturne in eb major","nocturne op 9 no 2","op 9 no 2","nocturne eb","nocturne in e flat"]},
+  {id:27, title:"Twenty-four Caprices for Solo Violin, Op. 1 (Caprice No. 1)", composer:"Niccolò Paganini", last:["paganini"], period:"Romantic", accept:["caprice no 1","caprice no. 1","caprice","24 caprices","twenty four caprices","caprices op 1"]},
+  {id:28, title:"Dichterliebe (A Poet's Love), In the Lovely Month of May", composer:"Robert Schumann", last:["schumann"], period:"Romantic", accept:["dichterliebe","in the lovely month of may","a poets love","lovely month of may","poets love"]},
+];
+
+// Part One file mapping + durations + Purcell split
+const FILE_DURATION1 = {
+  1:124,  2:110,  3:112,  4:271,  5:198,  6:239,
+  7:259,  8:368,  9:222,  10:177, 11:244, 12:680,
+  13:246, 14:218, 15:165, 16:278, 17:345, 18:494,
+  19:321, 20:125, 21:567, 22:477, 23:243, 24:567,
+  25:223, 26:104, 27:85
+};
+const ID_TO_FILE1 = {
+  1:1,2:2,3:3,4:4,5:5,6:6,7:7,8:8,9:9,10:10,
+  11:11,12:11,
+  13:12,14:13,15:14,16:15,17:16,18:17,19:18,
+  20:19,21:20,22:21,23:22,24:23,25:24,26:25,27:26,28:27
+};
+const PURCELL_SPLIT = 60;
+
+// ===================== PART TWO DATA =====================
+const SONGS2 = [
+  {id:1, title:"The Pirates of Penzance, I Am the Very Model of a Modern Major General", composer:"Gilbert & Sullivan", last:["gilbert sullivan","gilbert & sullivan","gilbert and sullivan"], period:"Operetta", accept:["i am the very model","modern major general","pirates of penzance","major general"]},
+  {id:2, title:"Turandot, Nessun dorma", composer:"Giacomo Puccini", last:["puccini"], period:"Post-Romantic", accept:["nessun dorma","turandot"]},
+  {id:3, title:"Die Walküre, Ride of the Valkyries", composer:"Richard Wagner", last:["wagner"], period:"Romantic", accept:["ride of the valkyries","die walkure","walkure","valkyries"]},
+  {id:4, title:"Preludes, Book I, La cathédrale engloutie (The Sunken Cathedral)", composer:"Claude Debussy", last:["debussy"], period:"Impressionist", accept:["la cathedrale engloutie","the sunken cathedral","sunken cathedral","cathedrale engloutie","preludes book 1"]},
+  {id:5, title:"Till Eulenspiegels lustige Streiche (Till Eulenspiegel's Merry Pranks)", composer:"Richard Strauss", last:["strauss"], period:"Post-Romantic", accept:["till eulenspiegel","merry pranks","lustige streiche","till eulenspiegels merry pranks"]},
+  {id:6, title:"Le sacre du printemps (The Rite of Spring)", composer:"Igor Stravinsky", last:["stravinsky"], period:"20th Century Primitivism", accept:["le sacre du printemps","the rite of spring","rite of spring","sacre du printemps"]},
+  {id:7, title:"The Perilous Night, No. 1", composer:"John Cage", last:["cage"], period:"20th Century Experimentalism", accept:["the perilous night","perilous night"]},
+  {id:8, title:"The Banshee", composer:"Henry Cowell", last:["cowell"], period:"20th Century Experimentalism", accept:["the banshee","banshee"]},
+  {id:9, title:"Three Places in New England, General Putnam's Camp", composer:"Charles Ives", last:["ives"], period:"20th Century Experimentalism", accept:["three places in new england","general putnam s camp","general putnams camp","putnam s camp","putnams camp"]},
+  {id:10, title:"Threnody for the Victims of Hiroshima", composer:"Krzysztof Penderecki", last:["penderecki"], period:"20th Century Experimentalism", accept:["threnody","victims of hiroshima","threnody for the victims of hiroshima"]},
+  {id:11, title:"Adagio for Strings", composer:"Samuel Barber", last:["barber"], period:"20th Century American", accept:["adagio for strings","adagio"]},
+  {id:12, title:"Concerto for Orchestra, Interrupted Intermezzo (4th movement)", composer:"Béla Bartók", last:["bartók"], period:"20th Century Primitivism", accept:["concerto for orchestra","interrupted intermezzo"]},
+  {id:13, title:"Appalachian Spring Suite, Variations On a Shaker Hymn", composer:"Aaron Copland", last:["copland"], period:"20th Century American", accept:["appalachian spring","shaker hymn","variations on a shaker hymn","appalachian spring suite"]},
+  {id:14, title:"Symphony No. 1 (Classical), Movement I", composer:"Sergei Prokofiev", last:["prokofiev"], period:"20th Century Neo-Classical", accept:["symphony no 1 classical","classical symphony","symphony no 1","prokofiev symphony 1"]},
+  {id:15, title:"Afro-American Symphony, Movement III", composer:"William Grant Still", last:["still"], period:"20th Century American", accept:["afro american symphony","afro-american symphony"]},
+  {id:16, title:"West Side Story, Tonight", composer:"Leonard Bernstein", last:["bernstein"], period:"Broadway", accept:["west side story tonight","tonight","west side story"]},
+  {id:17, title:"Porgy and Bess, Bess, You Is My Woman Now", composer:"George Gershwin", last:["gershwin"], period:"20th Century American", accept:["porgy and bess","bess you is my woman now","bess you is my woman"]},
+  {id:18, title:"Star Wars: Suite for Orchestra, Imperial March", composer:"John Williams", last:["williams"], period:"20th Century Film Music", accept:["star wars","imperial march","suite for orchestra imperial march"]},
+  {id:19, title:"Hotter Than That", composer:"Louis Armstrong", last:["armstrong"], period:"20th Century Chicago Jazz", accept:["hotter than that"]},
+  {id:20, title:"Boplicity", composer:"Miles Davis", last:["davis"], period:"20th Century Cool Jazz", accept:["boplicity"]},
+  {id:21, title:"Mood Indigo", composer:"Duke Ellington", last:["ellington"], period:"20th Century Big Band Jazz", accept:["mood indigo"]},
+  {id:22, title:"Maple Leaf Rag", composer:"Scott Joplin", last:["joplin"], period:"Ragtime", accept:["maple leaf rag","maple leaf"]},
+  {id:23, title:"Bloomdido", composer:"Charlie Parker", last:["parker"], period:"20th Century Bebop Jazz", accept:["bloomdido"]},
+  {id:24, title:"Lost Your Head Blues", composer:"Bessie Smith", last:["smith"], period:"20th Century Urban Blues", accept:["lost your head blues","lost your head"]},
+];
+
+// Part Two: each piece is its own file Song1.mp3 .. Song24.mp3, no splits.
+const ID_TO_FILE2 = {}; for(let i=1;i<=24;i++) ID_TO_FILE2[i]=i;
+// Durations unknown until measured; default 0 means "play whole file, no random-window cap issues".
+const FILE_DURATION2 = {};
+
+// ===================== ACTIVE PART =====================
+const PARTS = {
+  // count = number of exam pieces; fileCount = number of actual mp3 files in the folder
+  // (Part One has 28 pieces but only 27 files, since Song11.mp3 holds both piece 11 and 12)
+  1: { key:"p1", label:"Part One", songs:SONGS1, periods:PERIODS1, idToFile:ID_TO_FILE1, fileDur:FILE_DURATION1, count:28, fileCount:27, split:{id1:11,id2:12,at:PURCELL_SPLIT} },
+  2: { key:"p2", label:"Part Two", songs:SONGS2, periods:PERIODS2, idToFile:ID_TO_FILE2, fileDur:FILE_DURATION2, count:24, fileCount:24, split:null },
+};
+let activePartNum = 1;
+let PART = PARTS[1];
+// live references the rest of the app uses:
+let SONGS = PART.songs;
+let PERIODS = PART.periods;
+let ID_TO_FILE = PART.idToFile;
+let FILE_DURATION = PART.fileDur;
+
+const EMBEDDED_AUDIO = {};   // <-- music gets baked in here (per-part not needed; folder picker used)
+// Each part keeps its OWN loaded audio + folder-load state, so switching tabs
+// never throws away what you already uploaded for the other part.
+const audioMapByPart  = { 1:{}, 2:{} };
+const probedOkByPart  = { 1:new Set(), 2:new Set() };
+const folderStateByPart = { 1:null, 2:null };  // {loadedCount, missing, ok} once a folder's been picked for that part
+let audioMap = audioMapByPart[1];
+let probedOk = probedOkByPart[1];
+
+function fileForId(id, part){ part = part || PART; return "audio/Song"+part.idToFile[id]+".mp3"; }
+
+// Seed placeholder (non-working) paths for any piece that doesn't have real
+// loaded audio yet. Never touches ids that already point to a loaded blob URL.
+function seedAudioMap(partNum){
+  const p = PARTS[partNum], map = audioMapByPart[partNum];
+  p.songs.forEach(s=>{ if(!map[s.id]) map[s.id] = EMBEDDED_AUDIO[s.id] || fileForId(s.id, p); });
+}
+seedAudioMap(1); seedAudioMap(2);
+const hasAudio = id => !!EMBEDDED_AUDIO[id] || probedOk.has(id);
+
+// Segment for a list ID. Part One has the Purcell split; Part Two has none.
+function segmentFor(id){
+  const fileNum = ID_TO_FILE[id];
+  const full = FILE_DURATION[fileNum] || 0;
+  const sp = PART.split;
+  if(sp){
+    if(id===sp.id1) return {start:0, end:sp.at, dur:sp.at};
+    if(id===sp.id2) return {start:sp.at, end:full, dur:Math.max(0, full-sp.at)};
+  }
+  return {start:0, end:full, dur:full};
+}
+
+// Switch active part: points at that part's own data + already-loaded audio.
+// Nothing about the OTHER part's loaded audio is touched or cleared.
+function setActivePart(n){
+  activePartNum = n;
+  PART = PARTS[n];
+  SONGS = PART.songs;
+  PERIODS = PART.periods;
+  ID_TO_FILE = PART.idToFile;
+  FILE_DURATION = PART.fileDur;
+  audioMap = audioMapByPart[n];
+  probedOk = probedOkByPart[n];
+  renderFolderState(n);   // show THIS part's own loaded/missing status, if any
+  // clamp range inputs to this part's count
+  const rs=$("#rangeStart"), re=$("#rangeEnd");
+  if(rs){ rs.max=PART.count; if(+rs.value>PART.count) rs.value=1; }
+  if(re){ re.max=PART.count; if(+re.value>PART.count) re.value=Math.min(10,PART.count); }
+  buildList();
+  store = loadStore();   // per-part mastery store
+  updatePartText();
+}
+// Reflects a part's own folder-load state (loaded count / missing / ok) in the UI.
+// Called when switching tabs so each tab shows its own true status.
+function renderFolderState(n){
+  const badge=$("#fpBadge"), status=$("#fpStatus"), picker=$("#folderPicker");
+  const st = folderStateByPart[n];
+  if(!badge||!status||!picker) return;
+  if(!st){
+    badge.classList.add("hidden");
+    status.classList.add("hidden"); status.textContent="";
+    picker.classList.remove("loaded");
+    return;
+  }
+  badge.textContent = st.loadedCount+" / "+PARTS[n].fileCount;
+  badge.classList.remove("hidden");
+  picker.classList.add("loaded");
+  if(st.missing.length===0){
+    status.className="fp-status ok";
+    status.textContent="✓ All "+PARTS[n].fileCount+" files loaded — ready to begin.";
+  } else {
+    status.className="fp-status warn";
+    status.textContent="⚠ Missing: Song"+st.missing.join(".mp3, Song")+".mp3 — those pieces won't play.";
+  }
+  status.classList.remove("hidden");
+}
+function updatePartText(){
+  const lastFile = "Song"+PART.fileCount+".mp3";
+  if($("#fpSub")) $("#fpSub").textContent = "Pick the folder containing Song1.mp3 … "+lastFile;
+  if($("#rangeHint")) $("#rangeHint").textContent = "Any stretch of the "+PART.count+" pieces.";
+  if($("#pickHint")) $("#pickHint").textContent = "Type the exact numbers you want (1–"+PART.count+"), separated by commas.";
+  if($("#ltCount")) $("#ltCount").textContent = PART.count+" pieces";
+}
+
+/* ===================== HELPERS ===================== */
+const $ = s => document.querySelector(s);
+function switchScreen(fromSel, toSel){
+  const from=$(fromSel), to=$(toSel);
+  if(from && !from.classList.contains("hidden")){
+    from.classList.add("screen-out");
+    setTimeout(()=>{ from.classList.add("hidden"); from.classList.remove("screen-out"); }, 240);
+  }
+  setTimeout(()=>{
+    to.classList.remove("hidden");
+    to.classList.add("screen-in");
+    setTimeout(()=>to.classList.remove("screen-in"), 420);
+  }, from && !from.classList.contains("hidden") ? 200 : 0);
+}
+const PERIOD_COLORS = {
+  "Medieval":"#9683b8","Renaissance":"#5aa088","Baroque":"#cf8442","Classical":"#6b93c4","Romantic":"#c66585",
+  "Operetta":"#c98f5a","Post-Romantic":"#bd6a8c","Impressionist":"#6fa8c4","Broadway":"#d4794e","Ragtime":"#c9a94e",
+  "20th Century Primitivism":"#a0714f","20th Century Experimentalism":"#8a7cb0","20th Century American":"#5a8fa0",
+  "20th Century Neo-Classical":"#7d9a6a","20th Century Film Music":"#9a6a9a","20th Century Chicago Jazz":"#b06a4e",
+  "20th Century Cool Jazz":"#5a8aa8","20th Century Big Band Jazz":"#a88a4e","20th Century Bebop Jazz":"#9a5a6a",
+  "20th Century Urban Blues":"#5a6a9a"
+};
+function periodColor(p){ return PERIOD_COLORS[p] || "#8a8270"; }
+function periodShort(p){ return p.replace("20th Century ","").slice(0,10); }
+const norm = s => (s||"").toString().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9 ]/g," ").replace(/\s+/g," ").trim();
+// edit distance for spelling tolerance
+function levenshtein(a,b){
+  if(a===b)return 0; const m=a.length,n=b.length;
+  if(!m)return n; if(!n)return m;
+  let prev=Array(n+1); for(let j=0;j<=n;j++)prev[j]=j;
+  for(let i=1;i<=m;i++){ let cur=[i];
+    for(let j=1;j<=n;j++){ const cost=a[i-1]===b[j-1]?0:1;
+      cur[j]=Math.min(prev[j]+1,cur[j-1]+1,prev[j-1]+cost); }
+    prev=cur; }
+  return prev[n];
+}
+// true if two normalized strings are close enough (lenient on spelling/punctuation)
+function closeEnough(a,b){
+  if(!a||!b)return false;
+  if(a===b)return true;
+  const dist=levenshtein(a,b);
+  const len=Math.max(a.length,b.length);
+  // allow ~18% of the length in typos, min 2 for short words
+  const tol=Math.max(2, Math.floor(len*0.18));
+  return dist<=tol;
+}
+const escapeHtml = s => s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+function shuffle(arr){const a=arr.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function fmtTime(t){if(!isFinite(t))return "0:00";const m=Math.floor(t/60),s=Math.floor(t%60);return m+":"+String(s).padStart(2,"0");}
+function titleMatch(song,input){
+  const n=norm(input); if(!n)return false;
+  if(n===norm(song.title))return true;
+  if(closeEnough(n,norm(song.title)))return true;          // fuzzy vs full title
+  for(const a of song.accept){
+    const na=norm(a); if(!na)continue;
+    if(n===na)return true;
+    if(na.length>=4&&n.includes(na))return true;
+    if(n.length>=5&&na.includes(n))return true;
+    if(na.length>=5&&closeEnough(n,na))return true;        // fuzzy vs accepted forms
+  }
+  return false;
+}
+function composerMatch(song,input){
+  const n=norm(input); if(!n)return false;
+  const full=norm(song.composer);
+  if(n===full)return true;
+  // near-perfect full name only: allow at most ~1 typo per 12 chars, no last-name-only
+  const dist=levenshtein(n,full);
+  return dist<=Math.max(1, Math.floor(full.length*0.08));
+}
+
+/* ===================== STATE ===================== */
+/* ===================== MASTERY & STATS (persistent) ===================== */
+function storeKey(){ return "listeningRoom.v2." + (PART ? PART.key : "p1"); }
+let store = loadStore();
+function loadStore(){
+  try{ const raw=localStorage.getItem(storeKey()); if(raw) return JSON.parse(raw); }catch(e){}
+  return { pieces:{}, sessions:0, totalAnswered:0, totalCorrect:0, bestStreak:0, lastPlayed:null };
+}
+function saveStore(){ try{ localStorage.setItem(storeKey(), JSON.stringify(store)); }catch(e){} }
+function pieceStat(id){
+  if(!store.pieces[id]) store.pieces[id]={seen:0,correct:0,streak:0,lastResult:null};
+  return store.pieces[id];
+}
+// mastery level 0..4 from a piece's record
+function masteryLevel(id){
+  const p=store.pieces[id]; if(!p||p.seen===0) return 0;
+  const acc=p.correct/p.seen;
+  if(p.seen>=3 && acc>=0.85) return 4;   // mastered
+  if(acc>=0.7) return 3;                  // strong
+  if(acc>=0.45) return 2;                 // learning
+  return 1;                               // weak
+}
+function recordResult(id, fullyCorrect){
+  const p=pieceStat(id);
+  p.seen++; if(fullyCorrect){ p.correct++; p.streak++; } else { p.streak=0; }
+  p.lastResult=fullyCorrect?"correct":"wrong";
+  store.totalAnswered++; if(fullyCorrect) store.totalCorrect++;
+  saveStore();
+}
+
+let cfg={mode:"exam",order:"ordered",start:1,end:10,selMode:"range",pick:[],randomStart:false,lockScrub:false,examTiming:false};
+let queue=[],idx=0,answered=false,results=[];
+let cur={title:null,composer:null,period:null};
+let curSeg={start:0,end:0,dur:0};
+const audio=$("#audio"), preview=$("#preview");
+
+/* ===================== LIVE WAVEFORM ===================== */
+let audioCtx=null, analyser=null, srcNode=null, waveRAF=null, waveBars=[];
+function initWaveform(){
+  if(audioCtx) return;
+  try{
+    const Ctx = window.AudioContext || window.webkitAudioContext;
+    audioCtx = new Ctx();
+    analyser = audioCtx.createAnalyser();
+    analyser.fftSize = 256;
+    analyser.smoothingTimeConstant = 0.82;
+    srcNode = audioCtx.createMediaElementSource(audio);
+    srcNode.connect(analyser);
+    analyser.connect(audioCtx.destination);
+  }catch(e){ audioCtx=null; } // gracefully degrade if blocked
+}
+function drawWaveform(){
+  const cv=$("#waveform"); if(!cv||!analyser){ return; }
+  const ctx=cv.getContext("2d");
+  const dpr=window.devicePixelRatio||1;
+  const w=cv.clientWidth, h=cv.clientHeight;
+  cv.width=w*dpr; cv.height=h*dpr; ctx.setTransform(dpr,0,0,dpr,0,0);
+  const bins=analyser.frequencyBinCount;
+  const data=new Uint8Array(bins);
+  const brass=getComputedStyle(document.documentElement).getPropertyValue('--brass').trim()||'#c79a4b';
+  const bright=getComputedStyle(document.documentElement).getPropertyValue('--brass-bright').trim()||'#e3b964';
+
+  function frame(){
+    waveRAF=requestAnimationFrame(frame);
+    analyser.getByteFrequencyData(data);
+    ctx.clearRect(0,0,w,h);
+    const N=44;                       // number of bars
+    const step=Math.floor(bins*0.62/N);
+    const gap=3, bw=(w-(N-1)*gap)/N;
+    for(let i=0;i<N;i++){
+      const v=data[i*step]/255;
+      const target=Math.max(0.04, v);
+      waveBars[i]=(waveBars[i]||0)*0.55 + target*0.45;   // ease for smoothness
+      const bh=Math.max(2, waveBars[i]*h*0.92);
+      const x=i*(bw+gap), y=(h-bh)/2;
+      const grad=ctx.createLinearGradient(0,y,0,y+bh);
+      grad.addColorStop(0,bright); grad.addColorStop(1,brass);
+      ctx.fillStyle=grad;
+      const r=Math.min(bw/2,2);
+      roundRect(ctx,x,y,bw,bh,r); ctx.fill();
+    }
+  }
+  cancelAnimationFrame(waveRAF);
+  frame();
+}
+function roundRect(ctx,x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath();}
+function stopWaveform(){ if(waveRAF)cancelAnimationFrame(waveRAF); waveRAF=null; idleWaveform(); }
+function idleWaveform(){
+  const cv=$("#waveform"); if(!cv)return;
+  const w=cv.clientWidth,h=cv.clientHeight;
+  if(w<10){ setTimeout(idleWaveform,120); return; }  // canvas not laid out yet
+  const ctx=cv.getContext("2d");
+  const dpr=window.devicePixelRatio||1;
+  cv.width=w*dpr;cv.height=h*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);
+  ctx.clearRect(0,0,w,h);
+  const line=getComputedStyle(document.documentElement).getPropertyValue('--line').trim()||'#3a3228';
+  const N=44, gap=3, bw=(w-(N-1)*gap)/N;
+  ctx.fillStyle=line;
+  for(let i=0;i<N;i++){ const x=i*(bw+gap); roundRect(ctx,x,h/2-1.5,bw,3,1.5); ctx.fill(); }
+}
+
+/* ===================== FULL LIST + PREVIEW ===================== */
+let previewId=null;
+function buildList(){
+  $("#ltCount").textContent = SONGS.length+" pieces";
+  const inner=$("#listInner"); inner.innerHTML="";
+  SONGS.forEach(s=>{
+    const row=document.createElement("div");
+    row.className="list-row-wrap";
+    const seg = segmentFor(s.id);
+    const durStr = seg.dur ? fmtTime(seg.dur) : '';   // may be blank until audio loads
+    const sp = PART.split;
+    let splitNote = '';
+    if(sp){
+      if(s.id===sp.id2) splitNote = ' <span style="font-size:10px;color:var(--muted-2)">in Song '+sp.id1+', from '+fmtTime(sp.at)+'</span>';
+      else if(s.id===sp.id1) splitNote = ' <span style="font-size:10px;color:var(--muted-2)">first '+fmtTime(sp.at)+' of Song '+sp.id1+'</span>';
+    }
+    row.innerHTML=`
+      <div class="list-row">
+        <span class="lr-num">${String(s.id).padStart(2,"0")}</span>
+        <button class="lr-play" data-id="${s.id}" aria-label="Play">▶</button>
+        <div class="lr-body"><div class="lr-title">${escapeHtml(s.title)}</div><div class="lr-comp">${escapeHtml(s.composer)}${splitNote}</div></div>
+        <div class="lr-period"><span class="pglabel" data-p="${s.period}">${s.period}</span>&nbsp;<span class="lr-rowdur" data-id="${s.id}" style="font-family:var(--mono);font-size:10px;color:var(--muted-2)">${durStr}</span></div>
+      </div>
+      <div class="lr-scrub" data-id="${s.id}">
+        <span class="lr-cur">0:00</span>
+        <input type="range" class="lr-slider" min="0" max="1000" value="0" data-id="${s.id}">
+        <span class="lr-dur">${durStr}</span>
+      </div>`;
+    inner.appendChild(row);
+  });
+  inner.querySelectorAll(".lr-play").forEach(btn=>{
+    btn.addEventListener("click",()=>togglePreview(parseInt(btn.dataset.id,10),btn));
+  });
+  inner.querySelectorAll(".lr-slider").forEach(sl=>{
+    sl.addEventListener("input",e=>{
+      const id=parseInt(sl.dataset.id,10);
+      if(previewId===id){
+        const seg=previewSeg(id);
+        if(seg.dur) preview.currentTime = seg.start + (sl.value/1000)*seg.dur;
+      }
+    });
+  });
+}
+function currentScrub(id){ return document.querySelector('.lr-scrub[data-id="'+id+'"]'); }
+// Effective segment for the PREVIEW player: uses preset duration if known,
+// else the real loaded preview.duration (Part Two has no presets).
+function previewSeg(id){
+  const base = segmentFor(id);
+  const sp = PART.split;
+  if(sp && (id===sp.id1 || id===sp.id2)){
+    // split piece: id1 = 0..at ; id2 = at..realEnd
+    const full = (FILE_DURATION[ID_TO_FILE[id]]||0) || (isFinite(preview.duration)?preview.duration:0);
+    if(id===sp.id1) return {start:0, end:sp.at, dur:sp.at};
+    return {start:sp.at, end:full, dur:Math.max(0, full-sp.at)};
+  }
+  if(base.dur>0) return base;
+  // fall back to the real audio length
+  const real = isFinite(preview.duration)&&preview.duration>0 ? preview.duration : 0;
+  return {start:0, end:real, dur:real};
+}
+function setRowDuration(id){
+  const seg=previewSeg(id);
+  if(!seg.dur)return;
+  const str=fmtTime(seg.dur);
+  const rd=document.querySelector('.lr-rowdur[data-id="'+id+'"]'); if(rd&&!rd.textContent) rd.textContent=str;
+  const sc=currentScrub(id); if(sc){ const d=sc.querySelector(".lr-dur"); if(d&&!d.textContent) d.textContent=str; }
+}
+function togglePreview(id,btn){
+  if(previewId===id){ preview.pause(); return; }
+  preview.pause();
+  resetPreviewBtns();
+  previewId=id;
+  preview.src=audioMap[id];
+  document.querySelectorAll(".lr-scrub").forEach(s=>s.classList.remove("open"));
+  const scrub=currentScrub(id); if(scrub) scrub.classList.add("open");
+  // once we know the real length, fill in the duration label and seek to segment start
+  const onReady=()=>{ setRowDuration(id); const seg=previewSeg(id); try{ preview.currentTime=seg.start; }catch(e){} };
+  if(preview.readyState>=1) onReady();
+  else preview.addEventListener("loadedmetadata", onReady, {once:true});
+  preview.play().then(()=>{ btn.classList.add("playing"); btn.textContent="❚❚"; })
+    .catch(()=>{ btn.classList.add("dead"); btn.textContent="·"; previewId=null;
+      if(scrub) scrub.classList.remove("open");
+      setTimeout(()=>{btn.classList.remove("dead");btn.textContent="▶";},1400); });
+}
+preview.addEventListener("ended",resetPreviewBtns);
+preview.addEventListener("pause",resetPreviewBtns);
+preview.addEventListener("timeupdate",()=>{
+  if(previewId==null)return;
+  const seg=previewSeg(previewId);
+  if(seg.end && preview.currentTime>=seg.end-0.1){ preview.pause(); preview.currentTime=seg.start; return; }
+  const scrub=currentScrub(previewId); if(!scrub)return;
+  const within = Math.max(0, preview.currentTime - seg.start);
+  scrub.querySelector(".lr-slider").value = seg.dur ? (within/seg.dur)*1000 : 0;
+  scrub.querySelector(".lr-cur").textContent = fmtTime(within);
+});
+function resetPreviewBtns(){
+  document.querySelectorAll(".lr-play").forEach(b=>{b.classList.remove("playing");if(b.textContent!=="·")b.textContent="▶";});
+  document.querySelectorAll(".lr-scrub").forEach(s=>s.classList.remove("open"));
+  previewId=null;
+}
+
+$("#listToggle").addEventListener("click",()=>{
+  const open=$("#listPanel").classList.toggle("open");
+  $("#listToggle").classList.toggle("open",open);
+  if(!open) preview.pause();
+});
+
+$("#howtoToggle").addEventListener("click",()=>{
+  const open=$("#howtoPanel").classList.toggle("open");
+  $("#howtoToggle").classList.toggle("open",open);
+});
+
+/* ===================== SETUP UI ===================== */
+function pickSeg(c,attr,val){c.querySelectorAll("button").forEach(b=>b.classList.toggle("active",b.dataset[attr]===val));}
+$("#modeSel").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;cfg.mode=b.dataset.mode;pickSeg($("#modeSel"),"mode",cfg.mode);});
+$("#orderSel").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;cfg.order=b.dataset.order;pickSeg($("#orderSel"),"order",cfg.order);});
+$("#selSel").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;
+  cfg.selMode=b.dataset.sel; pickSeg($("#selSel"),"sel",cfg.selMode);
+  $("#rangeRow").classList.toggle("hidden",cfg.selMode!=="range");
+  $("#pickRow").classList.toggle("hidden",cfg.selMode!=="pick");
+});
+$("#partSwitch").addEventListener("click",e=>{
+  const b=e.target.closest("button"); if(!b)return;
+  const n=parseInt(b.dataset.part,10);
+  if(n===activePartNum)return;
+  $("#partSwitch").querySelectorAll("button").forEach(x=>x.classList.toggle("active",x===b));
+  setActivePart(n);
+  // close the list panel if open so the new list is fresh
+  $("#listPanel").classList.remove("open"); $("#listToggle").classList.remove("open");
+});
+
+/* ===================== FOLDER PICKER ===================== */
+// When embedded audio is present, no folder pick needed
+function probeRelative(){
+  if(Object.keys(EMBEDDED_AUDIO).length){ SONGS.forEach(s=>probedOk.add(s.id)); return; }
+}
+
+// Guess which exam these uploaded files belong to, so an upload lands in the
+// right place even if you're on the other tab (or upload both at some point).
+// 1) Folder name hint (e.g. "ListeningP1" / "ListeningRoom P2").
+// 2) Fallback: file count best-fits Part One's 27 files or Part Two's 24.
+function detectPart(files){
+  const relPath = (files[0] && files[0].webkitRelativePath) || "";
+  const folderName = relPath.split("/")[0] || "";
+  const fn = folderName.toLowerCase();
+  const isolatedDigit = d => new RegExp("(^|[^0-9])"+d+"([^0-9]|$)").test(fn);
+  const looksP1 = /\bpart\s*1\b|\bone\b/.test(fn) || isolatedDigit(1);
+  const looksP2 = /\bpart\s*2\b|\btwo\b/.test(fn) || isolatedDigit(2);
+  if(looksP2 && !looksP1) return 2;
+  if(looksP1 && !looksP2) return 1;
+  // fallback: any file numbered above 24 can only belong to Part One
+  let maxNum=0, matchedCount=0;
+  files.forEach(f=>{ const m=f.name.match(/Song(\d{1,2})\.mp3/i); if(m){ matchedCount++; maxNum=Math.max(maxNum,parseInt(m[1],10)); } });
+  if(maxNum>24) return 1;
+  const d1=Math.abs(PARTS[1].fileCount-matchedCount), d2=Math.abs(PARTS[2].fileCount-matchedCount);
+  return d2<=d1 ? 2 : 1;
+}
+
+// Folder picker wiring
+$("#folderPicker").addEventListener("click",()=>$("#folderInput").click());
+$("#folderInput").addEventListener("change", e=>{
+  const files=[...e.target.files];
+  if(!files.length) return;
+  const target = detectPart(files);           // which exam these files are for
+  const tPart = PARTS[target];
+  const tAudioMap = audioMapByPart[target];
+  const tProbedOk = probedOkByPart[target];
+  const byNum={};
+  files.forEach(f=>{
+    const m=f.name.match(/Song(\d{1,2})\.mp3/i);
+    if(m) byNum[parseInt(m[1],10)] = f;
+  });
+  const loaded=[], missing=[];
+  for(let n=1;n<=tPart.fileCount;n++){
+    if(byNum[n]){
+      const url=URL.createObjectURL(byNum[n]);
+      Object.entries(tPart.idToFile).forEach(([id,fn])=>{
+        if(fn===n){ tAudioMap[id]=url; tProbedOk.add(parseInt(id,10)); }
+      });
+      loaded.push(n);
+    } else { missing.push(n); }
+  }
+  folderStateByPart[target] = { loadedCount:loaded.length, missing, ok:missing.length===0 };
+
+  if(target===activePartNum){
+    // uploaded the folder for the tab you're currently on — show it right here
+    renderFolderState(activePartNum);
+    buildList();
+  } else {
+    // uploaded the OTHER part's folder while on this tab — file it away quietly,
+    // keep this tab's own status untouched, just flash a heads-up
+    renderFolderState(activePartNum);
+    const status=$("#fpStatus");
+    const prevClass=status.className, prevText=status.textContent, prevHidden=status.classList.contains("hidden");
+    status.className="fp-status ok";
+    status.textContent="✓ Loaded into "+tPart.label+" ("+loaded.length+"/"+tPart.fileCount+") — switch tabs to use it.";
+    status.classList.remove("hidden");
+    setTimeout(()=>{
+      status.className=prevClass; status.textContent=prevText;
+      status.classList.toggle("hidden", prevHidden);
+    }, 3200);
+  }
+  $("#folderInput").value = "";   // allow re-selecting the same folder later without issue
+});
+
+/* ===================== START ===================== */
+$("#startBtn").addEventListener("click",startSession);
+function startSession(){
+  preview.pause();
+  cfg.randomStart=$("#randomStart").checked;
+  cfg.lockScrub=$("#lockScrub").checked;
+  cfg.examTiming=$("#examTiming").checked;
+  const warnEl=$("#startWarn");
+  let sel;
+  if(cfg.selMode==="pick"){
+    // parse the typed list: "4, 5, 7, 9, 11" -> unique valid ids in this part
+    const raw=($("#pickList").value||"");
+    const ids=[...new Set(raw.split(/[^0-9]+/).map(x=>parseInt(x,10)).filter(n=>n>=1&&n<=PART.count))];
+    if(!ids.length){ warnEl.classList.remove("hidden"); warnEl.textContent="Type at least one piece number (e.g. 4, 5, 7) to test."; return; }
+    cfg.pick=ids;
+    // keep the user's typed order; map ids to songs
+    sel = ids.map(id=>SONGS.find(s=>s.id===id)).filter(Boolean);
+  } else {
+    let a=parseInt($("#rangeStart").value,10),b=parseInt($("#rangeEnd").value,10);
+    a=Math.max(1,Math.min(PART.count,a||1));b=Math.max(1,Math.min(PART.count,b||1));
+    if(a>b)[a,b]=[b,a];
+    cfg.start=a;cfg.end=b;
+    sel=SONGS.filter(s=>s.id>=a&&s.id<=b);
+  }
+  const missing=sel.filter(s=>!hasAudio(s.id)).map(s=>s.id);
+  const warn=$("#startWarn");
+  // If literally nothing is loaded, nudge to pick the folder first (unless embedded)
+  const anyAudio = Object.keys(EMBEDDED_AUDIO).length>0 || probedOk.size>0;
+  if(!anyAudio){
+    warn.classList.remove("hidden");
+    warn.textContent="Select your music folder above first — then the pieces will have audio to play.";
+    return;
+  }
+  if(missing.length){ warn.classList.remove("hidden"); warn.textContent=`Note: ${missing.length} piece${missing.length>1?"s":""} in this range (#${missing.join(", #")}) have no audio loaded — they'll be silent.`; }
+  else warn.classList.add("hidden");
+  queue=cfg.order==="shuffle"?shuffle(sel):sel.slice();
+  idx=0;results=[];crossedOut=new Set();bankOrder=[];
+  store.sessions++; store.lastPlayed=Date.now(); saveStore();
+  switchScreen("#setup","#quiz");
+  loadQuestion();
+}
+
+/* ===================== QUIZ ===================== */
+function loadQuestion(){
+  answered=false;cur={title:null,composer:null,period:null};
+  const song=queue[idx];
+  $("#qCount").textContent=`Question ${idx+1} of ${queue.length}`;
+  $("#qScore").textContent=`${results.filter(r=>r.correctAll).length} / ${results.length}`;
+  $("#qProgress").style.width=`${(idx/queue.length)*100}%`;
+  audio.pause();audio.src=audioMap[song.id];audio.load();
+  $("#playIcon") && setPlayIcon(false);
+  $("#timelineFill").style.width="0";$("#curTime").textContent="0:00";
+  windowReady=false;
+  const CLIP = 30;  // exam clip length in seconds
+
+  // Compute the playable window. If we don't know the piece's length up front
+  // (e.g. Part Two has no preset durations), wait for the audio metadata and
+  // use the real audio.duration instead. This makes random-start work everywhere.
+  function buildWindow(){
+    const presetFull = FILE_DURATION[ID_TO_FILE[song.id]] || 0;
+    const realFull = (isFinite(audio.duration) && audio.duration>0) ? audio.duration : 0;
+    const sp = PART.split;
+    let segStart, segEnd;
+    if(sp && (song.id===sp.id1 || song.id===sp.id2)){
+      // Purcell split piece: bound by the split point, use preset/real full for the tail
+      const full = presetFull || realFull;
+      if(song.id===sp.id1){ segStart=0; segEnd=sp.at; }
+      else { segStart=sp.at; segEnd=full || (sp.at+CLIP); }
+    } else {
+      segStart = 0;
+      segEnd = presetFull || realFull || 0;   // 0 only if metadata not ready yet
+    }
+    const segDur = Math.max(0, segEnd - segStart);
+
+    let clipStart = segStart;
+    if(cfg.randomStart && segDur>0){
+      const tail = cfg.examTiming ? CLIP : 8;
+      const hi = Math.max(segStart, segEnd - tail);
+      clipStart = segStart + Math.random()*(hi - segStart);
+    }
+    if(cfg.examTiming){
+      const end = segEnd>0 ? Math.min(segEnd, clipStart + CLIP) : (clipStart + CLIP);
+      curSeg = { start:clipStart, end:end, dur:end-clipStart };
+    } else {
+      curSeg = { start:segStart, end:segEnd, dur:segDur, _seekStart:clipStart };
+    }
+    $("#durTime").textContent = cfg.examTiming ? "—" : (curSeg.dur ? fmtTime(curSeg.dur) : "—");
+    try{ audio.currentTime = (curSeg._seekStart!=null?curSeg._seekStart:curSeg.start); }catch(e){}
+    windowReady=true;
+  }
+
+  // If we already know the length (preset OR metadata loaded), build now; else defer.
+  const knowLength = (FILE_DURATION[ID_TO_FILE[song.id]]||0) > 0 || (isFinite(audio.duration) && audio.duration>0);
+  curSeg = { start:0, end:0, dur:0 };   // placeholder until known
+  if(knowLength){ buildWindow(); }
+  else { audio.addEventListener("loadedmetadata", buildWindow, {once:true}); }
+
+  // replay hidden whenever exam lock or exam timing is on
+  $("#replayBtn").style.display=(!cfg.lockScrub && !cfg.examTiming)?"":"none";
+  $("#timeline").classList.toggle("locked", cfg.lockScrub || cfg.examTiming);
+  setTimeout(idleWaveform,480);
+  buildBank(song);buildTitleInput(song);buildComposerInput(song);buildPeriods();
+  $("#feedback").className="feedback";
+  $("#submitBtn").classList.remove("hidden");$("#nextBtn").classList.add("hidden");
+  $("#nextBtn").textContent=(idx===queue.length-1)?"See results ›":"Next ›";
+  window.scrollTo({top:0,behavior:"smooth"});
+  // auto-play the excerpt shortly after the question loads
+  clearTimeout(autoPlayTimer);
+  const myIdx=idx;
+  let apTries=0;
+  function tryAutoPlay(){
+    if(myIdx!==idx||answered)return;             // bail if user moved on or already answered
+    if(!windowReady && apTries<20){ apTries++; autoPlayTimer=setTimeout(tryAutoPlay,150); return; }
+    initWaveform();
+    if(audioCtx && audioCtx.state==="suspended") audioCtx.resume();
+    audio.play().catch(()=>{});                   // ignore if browser blocks (first gesture not given yet)
+  }
+  autoPlayTimer=setTimeout(tryAutoPlay, 1000);
+}
+let autoPlayTimer=null;
+let windowReady=false;
+let crossedOut = new Set();
+let bankOrder = [];  // session-stable word bank order  // song ids the user has struck off the bank this session
+function buildBank(song){
+  const bank=$("#bank"),grid=$("#bankGrid");
+  if(cfg.mode==="mc"||cfg.mode==="blank"){bank.classList.add("hidden");return;}
+  bank.classList.remove("hidden");
+  if(!bankOrder.length) bankOrder=shuffle(queue.slice());  // fixed for the whole session
+  const items=bankOrder;
+  // Exam mode: word bank shows ONLY titles; composer & period recalled from memory.
+  $("#bankTitle").innerHTML='Word bank — titles &nbsp;<span class="bank-hint">tap title to copy it in · tap ✕ to cross out · composer is from memory</span>';
+  grid.innerHTML=items.map(s=>`
+    <div class="chip${crossedOut.has(s.id)?' struck':''}" data-cid="${s.id}">
+      <span class="chip-text" data-cid="${s.id}">${escapeHtml(s.title)}</span>
+      <button class="chip-x" data-cid="${s.id}" aria-label="Cross out" title="Cross out">✕</button>
+    </div>`).join("");
+  // tap the title text -> copies it straight into the Title field
+  grid.querySelectorAll(".chip-text").forEach(t=>t.addEventListener("click",e=>{
+    e.stopPropagation();
+    const cid=parseInt(t.dataset.cid,10);
+    const s=SONGS.find(x=>x.id===cid);
+    const input=$("#titleText");
+    if(input){
+      input.value=s.title; cur.title=s.title;
+      input.classList.add("filled"); setTimeout(()=>input.classList.remove("filled"),500);
+    }
+  }));
+  // tap the ✕ -> cross out / restore, independent of copying
+  grid.querySelectorAll(".chip-x").forEach(x=>x.addEventListener("click",e=>{
+    e.stopPropagation();
+    const cid=parseInt(x.dataset.cid,10);
+    const chip=grid.querySelector('.chip[data-cid="'+cid+'"]');
+    if(crossedOut.has(cid)){ crossedOut.delete(cid); chip.classList.remove("struck"); }
+    else { crossedOut.add(cid); chip.classList.add("struck"); }
+  }));
+}
+function buildTitleInput(song){
+  const area=$("#titleInputArea");
+  if(cfg.mode==="mc"){const opts=makeChoices(song,"title");
+    area.innerHTML=`<div class="choices">`+opts.map(o=>`<button class="choice" data-val="${escapeHtml(o.id+"")}">${escapeHtml(o.text)}</button>`).join("")+`</div>`;
+    wireChoices(area,"title");
+  }else{ area.innerHTML=`<input type="text" id="titleText" autocomplete="off" placeholder="Type the title">`;
+    $("#titleText").addEventListener("input",e=>cur.title=e.target.value);
+    $("#titleText").addEventListener("keydown",enterHandler);}
+}
+function buildComposerInput(song){
+  const area=$("#composerInputArea");
+  if(cfg.mode==="mc"){const opts=makeChoices(song,"composer");
+    area.innerHTML=`<div class="choices">`+opts.map(o=>`<button class="choice" data-val="${escapeHtml(o.text)}">${escapeHtml(o.text)}</button>`).join("")+`</div>`;
+    wireChoices(area,"composer");
+  }else{ area.innerHTML=`<input type="text" id="composerText" autocomplete="off" placeholder="Type the composer (last name is fine)">`;
+    $("#composerText").addEventListener("input",e=>cur.composer=e.target.value);
+    $("#composerText").addEventListener("keydown",enterHandler);}
+}
+function makeChoices(song,kind){
+  if(kind==="title"){const others=shuffle(SONGS.filter(s=>s.id!==song.id)).slice(0,3);
+    return shuffle([song,...others]).map(s=>({id:s.id,text:s.title}));
+  }else{const pool=[...new Set(SONGS.filter(s=>s.composer!==song.composer).map(s=>s.composer))];
+    return shuffle([song.composer,...shuffle(pool).slice(0,3)]).map(t=>({text:t}));}
+}
+function wireChoices(area,kind){
+  area.querySelectorAll(".choice").forEach(btn=>btn.addEventListener("click",()=>{
+    if(answered)return;area.querySelectorAll(".choice").forEach(b=>b.classList.remove("sel"));
+    btn.classList.add("sel");cur[kind]=btn.dataset.val;}));
+}
+function buildPeriods(){
+  const area=$("#periodInputArea");
+  if(cfg.mode==="mc"){
+    // learning mode: period is multiple choice (all 5 are the options)
+    area.innerHTML=`<div class="choices period-choices">`+
+      PERIODS.map(p=>`<button class="choice" data-pval="${p}">${p}</button>`).join("")+`</div>`;
+    area.querySelectorAll(".choice").forEach(btn=>btn.addEventListener("click",()=>{
+      if(answered)return;
+      area.querySelectorAll(".choice").forEach(b=>b.classList.remove("sel"));
+      btn.classList.add("sel"); cur.period=btn.dataset.pval;
+    }));
+  } else {
+    const ph = PERIODS.length<=6 ? ("Type the period ("+PERIODS.join(", ")+")") : "Type the style (see the list for exact names)";
+    area.innerHTML=`<input type="text" id="periodText" autocomplete="off" placeholder="${ph}">`;
+    $("#periodText").addEventListener("input",e=>cur.period=e.target.value);
+    $("#periodText").addEventListener("keydown",enterHandler);
+  }
+}
+// Period typing is forgiving: accepts unique prefixes (e.g. "bar"->Baroque, "ren"->Renaissance)
+function periodMatch(input){
+  const n=norm(input);
+  if(!n)return null;
+  // exact
+  for(const p of PERIODS){ if(norm(p)===n) return p; }
+  // unique prefix
+  const pre=PERIODS.filter(p=>norm(p).startsWith(n));
+  if(pre.length===1) return pre[0];
+  // fuzzy: closest period within spelling tolerance (lenient for long style names)
+  let best=null,bestD=1e9;
+  for(const p of PERIODS){ const d=levenshtein(n,norm(p)); if(d<bestD){bestD=d;best=p;} }
+  if(best){ const len=Math.max(n.length,norm(best).length); if(bestD<=Math.max(2,Math.floor(len*0.2))) return best; }
+  // Part One shorthand
+  const sh={med:"Medieval",ren:"Renaissance",bar:"Baroque",cla:"Classical",rom:"Romantic"};
+  if(PERIODS.includes(sh[n.slice(0,3)])) return sh[n.slice(0,3)];
+  return null;
+}
+
+/* ===================== AUDIO ===================== */
+function setPlayIcon(playing){
+  const ic=$("#playIcon");
+  if(!ic)return;
+  ic.className = playing ? "ic-stop" : "ic-play";
+}
+function togglePlay(){
+  initWaveform();
+  if(audioCtx && audioCtx.state==="suspended") audioCtx.resume();
+  if(audio.paused)audio.play().catch(()=>{}); else audio.pause();
+}
+$("#playBtn").addEventListener("click",togglePlay);
+$("#replayBtn").addEventListener("click",()=>{ if(cfg.lockScrub||cfg.examTiming)return; audio.currentTime=curSeg.start||0;audio.play().catch(()=>{}); });
+audio.addEventListener("play",()=>{setPlayIcon(true);drawWaveform();});
+audio.addEventListener("pause",()=>{setPlayIcon(false);stopWaveform();});
+audio.addEventListener("ended",()=>{setPlayIcon(false);stopWaveform();});
+audio.addEventListener("timeupdate",()=>{
+  // auto-stop at the window end (30s clip under examTiming, else the segment end)
+  if(curSeg.end && audio.currentTime>=curSeg.end-0.05){
+    audio.pause();
+    if(cfg.examTiming){ try{ audio.currentTime=curSeg.end; }catch(e){} }  // lock at the end
+  }
+  const within=Math.max(0, audio.currentTime-(curSeg.start||0));
+  $("#curTime").textContent=fmtTime(within);
+  if(curSeg.dur) $("#timelineFill").style.width=`${Math.min(100,(within/curSeg.dur)*100)}%`;
+});
+audio.addEventListener("error",()=>$("#durTime").textContent="—");
+$("#timeline").addEventListener("click",e=>{
+  if(cfg.lockScrub||cfg.examTiming)return;   // no scrubbing under exam lock / timing
+  if(!curSeg.dur)return;
+  const r=e.currentTarget.getBoundingClientRect();
+  const frac=(e.clientX-r.left)/r.width;
+  audio.currentTime=(curSeg.start||0)+frac*curSeg.dur;
+});
+
+/* ===================== GRADING ===================== */
+$("#submitBtn").addEventListener("click",submitAnswer);
+$("#nextBtn").addEventListener("click",nextQuestion);
+$("#quitBtn").addEventListener("click",finish);
+function submitAnswer(){
+  if(answered)return;const song=queue[idx];
+  if($("#titleText"))cur.title=$("#titleText").value;
+  if($("#composerText"))cur.composer=$("#composerText").value;
+  if($("#periodText"))cur.period=$("#periodText").value;
+  let gotTitle,gotComposer;
+  if(cfg.mode==="mc"){gotTitle=cur.title!==null&&String(cur.title)===String(song.id);gotComposer=cur.composer!==null&&norm(cur.composer)===norm(song.composer);}
+  else{gotTitle=titleMatch(song,cur.title);gotComposer=composerMatch(song,cur.composer);}
+  const gotPeriod = cfg.mode==="mc" ? (cur.period===song.period) : (periodMatch(cur.period)===song.period);
+  const correctAll=gotTitle&&gotComposer&&gotPeriod;
+  results.push({song,correctAll,gotTitle,gotComposer,gotPeriod,ansTitle:cur.title,ansComposer:cur.composer,ansPeriod:cur.period});
+  recordResult(song.id, correctAll);
+  answered=true;
+  if(cfg.mode==="mc"){markChoices("title",song);markChoices("composer",song);markPeriodChoices(song);}
+  else{if($("#titleText"))$("#titleText").classList.add(gotTitle?"ok":"no");if($("#composerText"))$("#composerText").classList.add(gotComposer?"ok":"no");}
+  if($("#periodText"))$("#periodText").classList.add(gotPeriod?"ok":"no");
+  const fb=$("#feedback");fb.className="feedback show "+(correctAll?"right":"wrong");
+  $("#verdict").textContent=correctAll?"Correct":(gotTitle||gotComposer||gotPeriod?"Partly right":"Not quite");
+  $("#fbTitle").textContent=song.title;$("#fbComposer").textContent=song.composer;
+  $("#fbPeriod").innerHTML=`<span class="pglabel" data-p="${song.period}">${song.period}</span>`;
+  if(!correctAll){const m=[];if(!gotTitle)m.push("title");if(!gotComposer)m.push("composer");if(!gotPeriod)m.push("period");$("#fbYou").textContent="Missed: "+m.join(", ")+".";}else $("#fbYou").textContent="";
+  $("#submitBtn").classList.add("hidden");$("#nextBtn").classList.remove("hidden");
+  $("#qScore").textContent=`${results.filter(r=>r.correctAll).length} / ${results.length}`;
+  $("#qProgress").style.width=`${((idx+1)/queue.length)*100}%`;$("#nextBtn").focus();
+}
+function markChoices(kind,song){
+  const area=kind==="title"?$("#titleInputArea"):$("#composerInputArea");
+  area.querySelectorAll(".choice").forEach(btn=>{
+    const ok=kind==="title"?String(btn.dataset.val)===String(song.id):norm(btn.dataset.val)===norm(song.composer);
+    if(ok)btn.classList.add("correct");else if(btn.classList.contains("sel"))btn.classList.add("wrong");});
+}
+function markPeriodChoices(song){
+  $("#periodInputArea").querySelectorAll(".choice").forEach(btn=>{
+    const ok=btn.dataset.pval===song.period;
+    if(ok)btn.classList.add("correct");else if(btn.classList.contains("sel"))btn.classList.add("wrong");});
+}
+function nextQuestion(){ if(idx<queue.length-1){idx++;loadQuestion();}else finish(); }
+
+/* ===================== RESULTS ===================== */
+function gradeFor(pct){
+  if(pct>=97)return["A+","#6fae7d"]; if(pct>=93)return["A","#6fae7d"];
+  if(pct>=90)return["A−","#7aae6f"]; if(pct>=87)return["B+","#9bbf6a"];
+  if(pct>=83)return["B","#b8be63"]; if(pct>=80)return["B−","#c7b257"];
+  if(pct>=77)return["C+","#cf9f4a"]; if(pct>=73)return["C","#cf8442"];
+  if(pct>=70)return["C−","#cf7542"]; if(pct>=60)return["D","#cf6b52"];
+  return["F","#cf6b62"];
+}
+function animateCount(el, to, ms, suffix){
+  const start=performance.now(), from=0;
+  function step(t){
+    const k=Math.min(1,(t-start)/ms);
+    const e=1-Math.pow(1-k,3); // ease-out cubic
+    el.textContent=Math.round(from+(to-from)*e)+(suffix||"");
+    if(k<1)requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+function finish(){
+  audio.pause();stopWaveform();
+  switchScreen("#quiz","#results");
+  const total=results.length;
+  const fullyCorrect=results.filter(r=>r.correctAll).length;
+  let earned=0;
+  results.forEach(r=>{ earned += (r.gotTitle?1:0)+(r.gotComposer?1:0)+(r.gotPeriod?1:0); });
+  const possible=total*3;
+  const pct = possible? Math.round(earned/possible*100) : 0;
+  const tT=results.filter(r=>r.gotTitle).length;
+  const tC=results.filter(r=>r.gotComposer).length;
+  const tP=results.filter(r=>r.gotPeriod).length;
+
+  // grade ring animation
+  const [letter,color]=gradeFor(pct);
+  const ring=$("#grFill"), C=2*Math.PI*62;
+  ring.style.strokeDasharray=C; ring.style.strokeDashoffset=C; ring.style.stroke=color;
+  $("#gradeLetter").textContent=""; $("#gradeLetter").style.color=color;
+  $("#resScore").textContent="0%";
+  setTimeout(()=>{
+    ring.style.strokeDashoffset=C*(1-pct/100);
+    animateCount($("#resScore"), pct, 1100, "%");
+    setTimeout(()=>{ const gl=$("#gradeLetter"); gl.textContent=letter; gl.classList.add("pop"); },650);
+  },120);
+
+  $("#resPct").innerHTML=`${fullyCorrect} of ${total} pieces fully correct &nbsp;·&nbsp; ${earned}/${possible} points`;
+
+  const bd=$("#resBreakdown");
+  if(bd){
+    bd.innerHTML=`
+      <div class="bd-item"><span class="bd-label">Titles</span><span class="bd-val">${tT}/${total}</span></div>
+      <div class="bd-item"><span class="bd-label">Composers</span><span class="bd-val">${tC}/${total}</span></div>
+      <div class="bd-item"><span class="bd-label">Periods</span><span class="bd-val">${tP}/${total}</span></div>`;
+  }
+
+  // period heatmap: accuracy per period present in this session
+  const byPeriod={};
+  results.forEach(r=>{ const p=r.song.period; if(!byPeriod[p])byPeriod[p]={n:0,c:0}; byPeriod[p].n++; if(r.correctAll)byPeriod[p].c++; });
+  const heat=$("#heatmap");
+  const order=PERIODS.filter(p=>byPeriod[p]);
+  heat.innerHTML=order.map(p=>{
+    const d=byPeriod[p]; const acc=Math.round(d.c/d.n*100);
+    return `<div class="heat-cell"><div class="heat-bar-track"><div class="heat-bar" style="height:0%;background:${periodColor(p)}" data-target="${acc}"></div></div>
+      <div class="heat-acc">${acc}%</div><div class="heat-name" title="${escapeHtml(p)}">${escapeHtml(periodShort(p))}</div></div>`;
+  }).join("");
+  // animate heat bars
+  setTimeout(()=>{ heat.querySelectorAll(".heat-bar").forEach(b=>{ b.style.height=b.dataset.target+"%"; }); }, 300);
+
+  const list=$("#reviewList");list.innerHTML="";
+  results.forEach((r,i)=>{const row=document.createElement("div");row.className="review-row reveal";
+    row.style.animationDelay=(0.25+i*0.04)+"s";
+    const mk=(ok,lbl)=>`<span class="cmk ${ok?'y':'n'}">${ok?'✓':'✕'} ${lbl}</span>`;
+    const got=(r.gotTitle?1:0)+(r.gotComposer?1:0)+(r.gotPeriod?1:0);
+    const cls = r.correctAll?'ok':(got>0?'partial':'no');
+    const mark = r.correctAll?'✓':(got>0?'~':'✕');
+    let yourAns='';
+    if(!r.correctAll){
+      const bits=[];
+      if(!r.gotTitle && r.ansTitle) bits.push('you: "'+escapeHtml(String(r.ansTitle))+'"');
+      if(!r.gotComposer && r.ansComposer) bits.push('you: "'+escapeHtml(String(r.ansComposer))+'"');
+      if(!r.gotPeriod && r.ansPeriod) bits.push('you: "'+escapeHtml(String(r.ansPeriod))+'"');
+      if(bits.length) yourAns='<div class="your-ans">'+bits.join(' · ')+'</div>';
+    }
+    row.innerHTML=`<div class="review-mark ${cls}">${mark}</div>
+      <div class="review-body"><div class="tt">${escapeHtml(r.song.title)}</div>
+      <div class="cc">${escapeHtml(r.song.composer)} · <span class="pglabel" data-p="${r.song.period}">${r.song.period}</span></div>
+      <div class="cmarks">${mk(r.gotTitle,'title')} ${mk(r.gotComposer,'composer')} ${mk(r.gotPeriod,'period')}</div>
+      ${yourAns}</div>`;
+    list.appendChild(row);});
+  renderMastery();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+$("#restartBtn").addEventListener("click",()=>{switchScreen("#results","#setup");$("#startWarn").classList.add("hidden");});
+$("#retryMissed").addEventListener("click",()=>{
+  const missed=results.filter(r=>!r.correctAll).map(r=>r.song);
+  if(!missed.length){$("#retryMissed").textContent="Clean sweep — nothing to retry";return;}
+  queue=cfg.order==="shuffle"?shuffle(missed):missed.slice();idx=0;results=[];crossedOut=new Set();bankOrder=[];
+  switchScreen("#results","#quiz");loadQuestion();});
+
+/* ===================== KEYBOARD ===================== */
+function enterHandler(e){if(e.key==="Enter"){e.preventDefault();if(answered)nextQuestion();else submitAnswer();}}
+document.addEventListener("keydown",e=>{
+  if($("#quiz").classList.contains("hidden"))return;
+  const typing=["INPUT","TEXTAREA"].includes(document.activeElement.tagName);
+  if(e.code==="Space"&&!typing){e.preventDefault();togglePlay();}
+  if(e.key==="Enter"&&!typing){e.preventDefault();if(answered)nextQuestion();else submitAnswer();}
+});
+
+/* ===================== INIT ===================== */
+/* ===================== MASTERY MAP RENDER ===================== */
+function renderMastery(){
+  const map=$("#masteryMap"); if(!map)return;
+  map.innerHTML="";
+  SONGS.forEach(s=>{
+    const lvl=masteryLevel(s.id);
+    const cell=document.createElement("div");
+    cell.className="mcell ml"+lvl;
+    cell.dataset.id=s.id;
+    cell.title=`#${s.id} ${s.title}`;
+    cell.innerHTML=`<span>${s.id}</span>`;
+    cell.addEventListener("click",()=>{
+      // jump to setup and pre-fill this single piece to drill
+      switchScreen("#results","#setup");
+      setTimeout(()=>{
+        $("#rangeStart").value=s.id; $("#rangeEnd").value=s.id;
+        $("#rangeStart").scrollIntoView({behavior:"smooth",block:"center"});
+      }, 260);
+    });
+    map.appendChild(cell);
+  });
+  // stats
+  const mastered=SONGS.filter(s=>masteryLevel(s.id)===4).length;
+  const acc = store.totalAnswered? Math.round(store.totalCorrect/store.totalAnswered*100):0;
+  $("#masteryStats").innerHTML=`
+    <div class="mstat"><span class="mstat-n">${mastered}</span><span class="mstat-l">mastered</span></div>
+    <div class="mstat"><span class="mstat-n">${acc}%</span><span class="mstat-l">accuracy</span></div>
+    <div class="mstat"><span class="mstat-n">${store.sessions}</span><span class="mstat-l">sessions</span></div>`;
+  const weak=SONGS.filter(s=>{const l=masteryLevel(s.id);return l>0&&l<=2;});
+  if(mastered===28) $("#masterySub").textContent="All 28 mastered — you're ready.";
+  else if(weak.length) $("#masterySub").innerHTML=`Weak: ${weak.slice(0,6).map(s=>'#'+s.id).join(", ")}${weak.length>6?"…":""}`;
+  else $("#masterySub").textContent=PART.count+" pieces";
+}
+
+buildList();
+updatePartText();
+probeRelative();
+</script><script>
+/* ===================== PUBLIC DEMO AUDIO ===================== */
+/* Portfolio demo only. These are short generated placeholder tones,
+   not the real course recordings (those are licensed course material
+   and can't be redistributed publicly). Loads automatically so a
+   visitor can try the interface without picking a folder. The real
+   folder-picker above still works normally for actual practice with
+   your own copy of the real files. */
+(function () {
+  function demoPath(part, n) { return "audio/part" + part + "/Song" + n + ".mp3"; }
+
+  async function loadDemoPart(partNum) {
+    const p = PARTS[partNum];
+    const tAudioMap = audioMapByPart[partNum];
+    const tProbedOk = probedOkByPart[partNum];
+    const loaded = [], missing = [];
+    for (let n = 1; n <= p.fileCount; n++) {
+      try {
+        const res = await fetch(demoPath(partNum, n));
+        if (!res.ok) throw new Error("missing");
+        const blob = await res.blob();
+        const url = URL.createObjectURL(blob);
+        Object.entries(p.idToFile).forEach(([id, fn]) => {
+          if (fn === n) { tAudioMap[id] = url; tProbedOk.add(parseInt(id, 10)); }
+        });
+        loaded.push(n);
+      } catch (e) { missing.push(n); }
+    }
+    folderStateByPart[partNum] = { loadedCount: loaded.length, missing, ok: missing.length === 0 };
+  }
+
+  function addDemoBanner() {
+    const wrap = document.getElementById("folderPickerWrap");
+    if (!wrap) return;
+    const note = document.createElement("div");
+    note.style.cssText = "margin:0 0 12px;padding:10px 13px;border-left:3px solid var(--brass);" +
+      "background:var(--surface-2);font-size:13px;line-height:1.5;color:var(--ivory-dim);";
+    note.innerHTML = "<b style=\"color:var(--brass-bright)\">Demo mode:</b> playing short placeholder " +
+      "tones, not the real recordings &mdash; those are licensed course material. The tool itself " +
+      "(grading, mastery tracking, exam timing) is fully live.";
+    wrap.parentNode.insertBefore(note, wrap);
+  }
+
+  window.addEventListener("DOMContentLoaded", async function () {
+    await Promise.all([loadDemoPart(1), loadDemoPart(2)]);
+    // Demo tones are a fixed short length. Overwrite the real pieces'
+    // durations so the timer and progress bar match what actually plays,
+    // instead of showing the original piece's real (much longer) length.
+    const DEMO_DUR = 2.2;
+    Object.keys(FILE_DURATION1).forEach(k => FILE_DURATION1[k] = DEMO_DUR);
+    Object.keys(FILE_DURATION2).forEach(k => FILE_DURATION2[k] = DEMO_DUR);
+    renderFolderState(activePartNum);
+    if (typeof buildList === "function") buildList();
+    addDemoBanner();
+  });
+})();
+</script>
+</body>
+</html>

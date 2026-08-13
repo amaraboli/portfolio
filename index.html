@@ -173,7 +173,7 @@ figcaption b{color:var(--ink);font-weight:600}
 
 /* ---------- software ---------- */
 .software{padding:88px 0 0}
-.sw-grid{display:grid;grid-template-columns:repeat(3,1fr);border:1.5px solid var(--rule-strong);margin-top:28px}
+.sw-grid{display:grid;grid-template-columns:repeat(2,1fr);border:1.5px solid var(--rule-strong);margin-top:28px}
 .sw{padding:24px 22px 26px;border-right:1px solid var(--rule);background:var(--panel)}
 .sw:last-child{border-right:none}
 .sw h3{font-family:"Archivo",sans-serif;font-weight:700;font-size:1.14rem;margin:0 0 4px;letter-spacing:-.012em}
@@ -587,8 +587,8 @@ footer .contact{font-family:"IBM Plex Mono",monospace;font-size:13.5px;line-heig
     </div>
     <h2>Software</h2>
     <p class="standfirst">
-      Web apps I built to solve problems I actually had. One music theory tool, and two study
-      tools written for my own coursework.
+      Web apps I built to solve problems I actually had. A music theory tool, and an ear
+      trainer written for my own coursework.
     </p>
 
     <div class="sw-grid">
@@ -608,22 +608,20 @@ footer .contact{font-family:"IBM Plex Mono",monospace;font-size:13.5px;line-heig
 
       <div class="sw">
         <h3>Listening Test Trainer</h3>
-        <span class="stack">React &middot; Audio</span>
+        <span class="stack">React &middot; Audio &middot; Spaced repetition</span>
         <p>
-          Ear training for a music history course. Identify the title, composer, and period of
-          28 works by listening. Tracks what you have mastered and drills what you miss.
+          Ear training built for a music history course. Identify the title, composer, and
+          period of 28 works by listening. Tracks what you have mastered and drills what you
+          miss.
         </p>
-        <span class="lk">Hosting in progress</span>
-      </div>
-
-      <div class="sw">
-        <h3>Art Exam Practice Trainer</h3>
-        <span class="stack">React &middot; Image quiz</span>
-        <p>
-          Image identification practice for an art history course. Custom question ranges,
-          multiple grading modes, and a dashboard tracking performance across sessions.
+        <a class="livebtn" href="listening-demo/index.html">
+          <span class="dot" aria-hidden="true"></span> Open live demo &rarr;
+        </a>
+        <p style="font-size:12px;color:var(--graphite);margin:10px 0 0;line-height:1.5">
+          Demo plays short placeholder tones instead of the real recordings, which are
+          licensed course material. Everything else, grading, mastery tracking, exam
+          timing, is fully live.
         </p>
-        <span class="lk">Hosting in progress</span>
       </div>
     </div>
   </div>
